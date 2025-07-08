@@ -27,7 +27,7 @@
                 variant="outlined"
                 size="large"
                 class="hero-cta-secondary"
-                @click="scrollToSection('features')"
+                @click="scrollToSection('demo')"
               >
                 {{ $t('hero_secondary_cta') }}
               </v-btn>
@@ -176,6 +176,64 @@
       </v-container>
     </section>
 
+    <!-- Demo Section -->
+    <section class="demo-section" id="demo">
+      <v-container>
+        <div class="section-header text-center mb-8">
+          <h2 class="section-title">Try the Demo</h2>
+          <p class="section-subtitle">Experience the platform with our mock authentication system</p>
+        </div>
+        
+        <v-card class="demo-card" elevation="4">
+          <v-card-text class="pa-6">
+            <v-row align="center">
+              <v-col cols="12" md="6">
+                <h3 class="text-h5 font-weight-bold mb-3">Quick Demo Login</h3>
+                <p class="text-body-1 mb-4">
+                  Test the platform with our pre-configured demo accounts. All accounts use the password: <strong>password123</strong>
+                </p>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                  <v-btn
+                    v-for="(user, index) in demoUsers"
+                    :key="user.email"
+                    color="primary"
+                    variant="outlined"
+                    @click="quickDemoLogin(index)"
+                    :loading="isLoading"
+                  >
+                    <v-avatar size="24" class="mr-2">
+                      <v-img :src="user.avatar" />
+                    </v-avatar>
+                    {{ user.firstName }}
+                  </v-btn>
+                </div>
+                <v-alert
+                  v-if="demoMessage"
+                  :type="demoMessage.type"
+                  variant="tonal"
+                  class="mb-4"
+                >
+                  {{ demoMessage.text }}
+                </v-alert>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-card variant="outlined" class="pa-4">
+                  <h4 class="text-h6 mb-3">Demo Features</h4>
+                  <ul class="demo-features">
+                    <li>Mock user authentication</li>
+                    <li>Session persistence</li>
+                    <li>Protected routes</li>
+                    <li>User profile management</li>
+                    <li>Document management</li>
+                  </ul>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-container>
+    </section>
+
     <!-- Final CTA Section -->
     <section class="final-cta-section">
       <v-container>
@@ -199,6 +257,63 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAppStore } from '@/stores/app'
+
+const router = useRouter()
+const appStore = useAppStore()
+
+// Demo functionality
+const isLoading = ref(false)
+const demoMessage = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+
+const demoUsers = ref([
+  { 
+    email: 'john@example.com', 
+    firstName: 'John',
+    avatar: 'https://i.pravatar.cc/150?img=1'
+  },
+  { 
+    email: 'jane@example.com', 
+    firstName: 'Jane',
+    avatar: 'https://i.pravatar.cc/150?img=2'
+  },
+  { 
+    email: 'demo@legeclair.com', 
+    firstName: 'Demo',
+    avatar: 'https://i.pravatar.cc/150?img=3'
+  }
+])
+
+const quickDemoLogin = async (userIndex: number) => {
+  isLoading.value = true
+  demoMessage.value = null
+  
+  try {
+    const success = appStore.mockQuickLogin(userIndex)
+    if (success) {
+      demoMessage.value = {
+        type: 'success',
+        text: `Successfully logged in as ${demoUsers.value[userIndex].firstName}! Redirecting to documents...`
+      }
+      setTimeout(() => {
+        router.push('/documents')
+      }, 1500)
+    } else {
+      demoMessage.value = {
+        type: 'error',
+        text: 'Failed to login. Please try again.'
+      }
+    }
+  } catch (error) {
+    demoMessage.value = {
+      type: 'error',
+      text: 'An error occurred during login.'
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
 
 // Reactive data for dynamic content
 const problems = ref([
@@ -337,6 +452,36 @@ const selectPlan = (plan: any) => {
 
 .hero-cta-primary {
   min-width: 200px;
+}
+
+/* Demo Section */
+.demo-section {
+  background: #f8f9ff;
+  padding: 80px 0;
+}
+
+.demo-card {
+  border-radius: 16px;
+}
+
+.demo-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.demo-features li {
+  padding: 8px 0;
+  position: relative;
+  padding-left: 24px;
+}
+
+.demo-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #4CAF50;
+  font-weight: bold;
 }
 
 .hero-cta-secondary {

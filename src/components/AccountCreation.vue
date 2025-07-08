@@ -7,6 +7,19 @@
       <div class="text-body-1 text-medium-emphasis mb-6 text-center">
         {{$t('register_subtitle')}}
       </div>
+      
+      <!-- Error Alert -->
+      <v-alert
+        v-if="appStore.error"
+        type="error"
+        variant="tonal"
+        class="mb-4"
+        closable
+        @click:close="appStore.clearError()"
+      >
+        {{ appStore.error }}
+      </v-alert>
+
       <v-form @submit.prevent="onSubmit" v-slot="{ isValid }">
         <v-text-field
           v-model="username"
@@ -16,6 +29,7 @@
           density="comfortable"
           variant="outlined"
           required
+          :disabled="appStore.isLoading"
         />
         <v-text-field
           v-model="email"
@@ -26,6 +40,27 @@
           density="comfortable"
           variant="outlined"
           required
+          :disabled="appStore.isLoading"
+        />
+        <v-text-field
+          v-model="firstName"
+          :label="$t('first_name')"
+          prepend-inner-icon="mdi-account-outline"
+          class="mb-3"
+          density="comfortable"
+          variant="outlined"
+          required
+          :disabled="appStore.isLoading"
+        />
+        <v-text-field
+          v-model="lastName"
+          :label="$t('last_name')"
+          prepend-inner-icon="mdi-account-outline"
+          class="mb-3"
+          density="comfortable"
+          variant="outlined"
+          required
+          :disabled="appStore.isLoading"
         />
         <v-text-field
           v-model="password"
@@ -38,12 +73,14 @@
           density="comfortable"
           variant="outlined"
           required
+          :disabled="appStore.isLoading"
         />
         <v-checkbox
           v-model="agree"
           class="mb-4 mt-1"
           density="comfortable"
           hide-details
+          :disabled="appStore.isLoading"
         >
           <template #label>
             {{$t('register_agree')}}
@@ -58,9 +95,10 @@
           size="large"
           class="mb-4 mt-2 text-white"
           style="font-weight: 600; font-size: 1.1rem; background: #8b5cf6; box-shadow: 0 2px 8px 0 rgba(139,92,246,0.10);"
-          :disabled="!username || !email || !password || !agree"
+          :disabled="!username || !email || !password || !firstName || !lastName || !agree || appStore.isLoading"
+          :loading="appStore.isLoading"
         >
-          {{$t('sign_up')}}
+          {{ appStore.isLoading ? 'Creating account...' : $t('sign_up') }}
         </v-btn>
       </v-form>
       <div class="text-center mb-4 text-medium-emphasis">
@@ -73,16 +111,16 @@
         <v-divider class="flex-grow-1" />
       </div>
       <div class="d-flex justify-center align-center" style="gap: 18px;">
-        <v-btn icon variant="plain" size="large" @click="onSocial('facebook')">
+        <v-btn icon variant="plain" size="large" @click="onSocial('facebook')" :disabled="appStore.isLoading">
           <v-icon size="24" color="#1877f3">mdi-facebook</v-icon>
         </v-btn>
-        <v-btn icon variant="plain" size="large" @click="onSocial('twitter')">
+        <v-btn icon variant="plain" size="large" @click="onSocial('twitter')" :disabled="appStore.isLoading">
           <v-icon size="24" color="#1da1f2">mdi-twitter</v-icon>
         </v-btn>
-        <v-btn icon variant="plain" size="large" @click="onSocial('github')">
+        <v-btn icon variant="plain" size="large" @click="onSocial('github')" :disabled="appStore.isLoading">
           <v-icon size="24" color="#23272f">mdi-github</v-icon>
         </v-btn>
-        <v-btn icon variant="plain" size="large" @click="onSocial('google')">
+        <v-btn icon variant="plain" size="large" @click="onSocial('google')" :disabled="appStore.isLoading">
           <v-icon size="24" color="#ea4335">mdi-google</v-icon>
         </v-btn>
       </div>
@@ -91,21 +129,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAppStore } from '@/stores/app'
+
+const router = useRouter()
+const appStore = useAppStore()
 
 const username = ref('')
 const email = ref('')
 const password = ref('')
+const firstName = ref('')
+const lastName = ref('')
 const showPassword = ref(false)
 const agree = ref(false)
 
-function onSubmit() {
-  // Handle account creation logic here
-  alert('Account creation not implemented')
+async function onSubmit() {
+  if (!username.value || !email.value || !password.value || !firstName.value || !lastName.value || !agree.value) return
+
+  const success = await appStore.register({
+    username: username.value,
+    email: email.value,
+    password: password.value,
+    firstName: firstName.value,
+    lastName: lastName.value
+  })
+
+  if (success) {
+    // Navigate to documents page after successful registration
+    router.push('/documents')
+  }
 }
 
 function onSocial(provider: string) {
   // Handle social OAuth logic here
   alert('Social sign-in with ' + provider + ' not implemented')
 }
+
+onMounted(() => {
+  // Clear any existing errors when component mounts
+  appStore.clearError()
+})
 </script> 

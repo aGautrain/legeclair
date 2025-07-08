@@ -217,6 +217,7 @@
              class="documents-table"
              show-select
              :model-value="selectedDocuments"
+             :items-per-page-text="$t('items_per_page')"
              @update:model-value="handleSelectionChange"
              @update:sort-by="handleSort"
              @update:page="handlePageChange"
