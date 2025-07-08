@@ -12,7 +12,9 @@ declare module 'vue' {
     AccountLogin: typeof import('./components/AccountLogin.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     AppTopbar: typeof import('./components/AppTopbar.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    DocumentGenerationDialog: typeof import('./components/DocumentGenerationDialog.vue')['default']
+    DocumentViewDialog: typeof import('./components/DocumentViewDialog.vue')['default']
+    Landing: typeof import('./components/Landing.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

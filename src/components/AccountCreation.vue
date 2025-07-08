@@ -47,8 +47,8 @@
         >
           <template #label>
             {{$t('register_agree')}}
-            <router-link to="/privacy-policy" class="text-primary text-decoration-none">{{$t('privacy_policy')}}</router-link> &
-            <router-link to="/terms" class="text-primary text-decoration-none">{{$t('terms_of_use')}}</router-link>
+            <router-link to="/privacy-policy" class="text-primary text-decoration-none px-1">{{$t('privacy_policy')}}</router-link> &
+            <router-link to="/terms" class="text-primary text-decoration-none px-1">{{$t('terms_of_use')}}</router-link>
           </template>
         </v-checkbox>
         <v-btn
