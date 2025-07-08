@@ -630,7 +630,7 @@ const exportTable = () => {
 }
 
 const generateCSV = (documents: Document[]) => {
-  const headers = ['Name', 'Type', 'Status', 'Created', 'Modified']
+  const headers = [t('document_name'), t('type'), t('status'), t('created'), t('modified')]
   const rows = documents.map(doc => [
     doc.name,
     getDocumentTypeLabel(doc.type),
@@ -675,9 +675,9 @@ const getDocumentColor = (type: DocumentType) => {
 
 const getDocumentTypeLabel = (type: DocumentType) => {
   const labels = {
-    TOS: 'Terms of Service',
-    PRIVACY_POLICY: 'Privacy Policy',
-    CGU: 'Terms & Conditions'
+    TOS: t('terms_of_service'),
+    PRIVACY_POLICY: t('privacy_policy'),
+    CGU: t('terms_conditions')
   }
   return labels[type]
 }
@@ -694,10 +694,10 @@ const getStatusColor = (status: DocumentStatus) => {
 
 const getStatusLabel = (status: DocumentStatus) => {
   const labels = {
-    DRAFT: 'Draft',
-    GENERATED: 'Generated',
-    PUBLISHED: 'Published',
-    ARCHIVED: 'Archived'
+    DRAFT: t('draft'),
+    GENERATED: t('generated'),
+    PUBLISHED: t('published'),
+    ARCHIVED: t('archived')
   }
   return labels[status]
 }

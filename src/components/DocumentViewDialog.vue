@@ -42,15 +42,15 @@
         <v-tabs v-model="activeTab" color="primary" grow>
           <v-tab value="preview">
             <v-icon start>mdi-eye</v-icon>
-            Preview
+            {{ $t('document_preview') }}
           </v-tab>
           <v-tab value="edit">
             <v-icon start>mdi-pencil</v-icon>
-            Edit
+            {{ $t('edit_document') }}
           </v-tab>
           <v-tab value="metadata">
             <v-icon start>mdi-information</v-icon>
-            Details
+            {{ $t('document_details') }}
           </v-tab>
         </v-tabs>
 
@@ -59,7 +59,7 @@
           <v-window-item value="preview">
             <div class="pa-6">
               <div class="d-flex justify-space-between align-center mb-4">
-                <h3 class="text-h6">Document Preview</h3>
+                <h3 class="text-h6">{{ $t('document_preview') }}</h3>
                 <div class="d-flex gap-2">
                   <v-btn
                     variant="outlined"
@@ -67,7 +67,7 @@
                     prepend-icon="mdi-download"
                     @click="downloadDocument"
                   >
-                    Download
+                    {{ $t('download') }}
                   </v-btn>
                   <v-btn
                     variant="outlined"
@@ -75,7 +75,7 @@
                     prepend-icon="mdi-printer"
                     @click="printDocument"
                   >
-                    Print
+                    {{ $t('print') }}
                   </v-btn>
                 </div>
               </div>
@@ -87,7 +87,7 @@
                     <v-icon size="48" color="grey-lighten-1" class="mb-4">
                       mdi-file-document-outline
                     </v-icon>
-                    <p class="text-grey-darken-1">No document content available</p>
+                    <p class="text-grey-darken-1">{{ $t('no_document_content') }}</p>
                   </div>
                 </v-card-text>
               </v-card>
@@ -98,7 +98,7 @@
           <v-window-item value="edit">
             <div class="pa-6">
               <div class="d-flex justify-space-between align-center mb-4">
-                <h3 class="text-h6">Edit Document</h3>
+                <h3 class="text-h6">{{ $t('edit_document') }}</h3>
                 <div class="d-flex gap-2">
                   <v-btn
                     variant="outlined"
@@ -106,7 +106,7 @@
                     @click="resetContent"
                     :disabled="!hasChanges"
                   >
-                    Reset
+                    {{ $t('reset') }}
                   </v-btn>
                   <v-btn
                     color="primary"
@@ -115,7 +115,7 @@
                     :loading="isSaving"
                     :disabled="!hasChanges"
                   >
-                    Save Changes
+                    {{ $t('save_changes') }}
                   </v-btn>
                 </div>
               </div>
@@ -123,9 +123,9 @@
               <v-form ref="editForm" v-model="isEditFormValid">
                 <v-text-field
                   v-model="editData.name"
-                  label="Document Name"
+                  :label="$t('document_name')"
                   variant="outlined"
-                  :rules="[v => !!v || 'Document name is required']"
+                  :rules="[v => !!v || $t('required_field')]"
                   required
                   class="mb-4"
                 />
@@ -133,18 +133,18 @@
                 <v-select
                   v-model="editData.status"
                   :items="statusOptions"
-                  label="Status"
+                  :label="$t('status')"
                   variant="outlined"
-                  :rules="[v => !!v || 'Status is required']"
+                  :rules="[v => !!v || $t('required_field')]"
                   required
                   class="mb-4"
                 />
 
                 <v-textarea
                   v-model="editData.content"
-                  label="Document Content"
+                  :label="$t('document_content')"
                   variant="outlined"
-                  :rules="[v => !!v || 'Document content is required']"
+                  :rules="[v => !!v || $t('required_field')]"
                   required
                   rows="20"
                   auto-grow
@@ -157,27 +157,27 @@
           <!-- Metadata Tab -->
           <v-window-item value="metadata">
             <div class="pa-6">
-              <h3 class="text-h6 mb-4">Document Details</h3>
+              <h3 class="text-h6 mb-4">{{ $t('document_details') }}</h3>
               
               <v-row v-if="document">
                 <v-col cols="12" md="6">
                   <v-card variant="outlined">
-                    <v-card-title class="text-subtitle-1">Basic Information</v-card-title>
+                    <v-card-title class="text-subtitle-1">{{ $t('basic_information') }}</v-card-title>
                     <v-card-text>
                       <div class="d-flex justify-space-between mb-2">
-                        <span class="font-weight-medium">Document ID:</span>
+                        <span class="font-weight-medium">{{ $t('document_id') }}:</span>
                         <span class="text-medium-emphasis">{{ document.id }}</span>
                       </div>
                       <div class="d-flex justify-space-between mb-2">
-                        <span class="font-weight-medium">Created:</span>
+                        <span class="font-weight-medium">{{ $t('created') }}:</span>
                         <span class="text-medium-emphasis">{{ formatDate(document.createdAt) }}</span>
                       </div>
                       <div class="d-flex justify-space-between mb-2">
-                        <span class="font-weight-medium">Last Modified:</span>
+                        <span class="font-weight-medium">{{ $t('modified') }}:</span>
                         <span class="text-medium-emphasis">{{ formatDate(document.updatedAt) }}</span>
                       </div>
                       <div class="d-flex justify-space-between">
-                        <span class="font-weight-medium">Version:</span>
+                        <span class="font-weight-medium">{{ $t('version') }}:</span>
                         <span class="text-medium-emphasis">{{ document.version }}</span>
                       </div>
                     </v-card-text>
@@ -186,22 +186,22 @@
 
                 <v-col cols="12" md="6">
                   <v-card variant="outlined">
-                    <v-card-title class="text-subtitle-1">Company Information</v-card-title>
+                    <v-card-title class="text-subtitle-1">{{ $t('company_information') }}</v-card-title>
                     <v-card-text>
                       <div class="d-flex justify-space-between mb-2">
-                        <span class="font-weight-medium">Company:</span>
+                        <span class="font-weight-medium">{{ $t('company_name') }}:</span>
                         <span class="text-medium-emphasis">{{ document.metadata?.companyName || 'N/A' }}</span>
                       </div>
                       <div class="d-flex justify-space-between mb-2">
-                        <span class="font-weight-medium">Domain:</span>
+                        <span class="font-weight-medium">{{ $t('website_domain') }}:</span>
                         <span class="text-medium-emphasis">{{ document.metadata?.domain || 'N/A' }}</span>
                       </div>
                       <div class="d-flex justify-space-between mb-2">
-                        <span class="font-weight-medium">Jurisdiction:</span>
+                        <span class="font-weight-medium">{{ $t('legal_jurisdiction') }}:</span>
                         <span class="text-medium-emphasis">{{ document.metadata?.jurisdiction || 'N/A' }}</span>
                       </div>
                       <div class="d-flex justify-space-between">
-                        <span class="font-weight-medium">Address:</span>
+                        <span class="font-weight-medium">{{ $t('company_address') }}:</span>
                         <span class="text-medium-emphasis">{{ document.metadata?.customFields?.companyAddress || 'N/A' }}</span>
                       </div>
                     </v-card-text>
@@ -210,7 +210,7 @@
 
                 <v-col cols="12" v-if="document.metadata?.customFields">
                   <v-card variant="outlined">
-                    <v-card-title class="text-subtitle-1">Additional Information</v-card-title>
+                    <v-card-title class="text-subtitle-1">{{ $t('additional_information') }}</v-card-title>
                     <v-card-text>
                       <v-row>
                         <v-col 
@@ -237,7 +237,7 @@
                 <v-icon size="48" color="grey-lighten-1" class="mb-4">
                   mdi-information-outline
                 </v-icon>
-                <p class="text-grey-darken-1">No document details available</p>
+                <p class="text-grey-darken-1">{{ $t('no_document_details') }}</p>
               </div>
             </div>
           </v-window-item>
@@ -251,7 +251,7 @@
           @click="closeDialog"
           :disabled="isSaving"
         >
-          Close
+          {{ $t('close') }}
         </v-btn>
         <v-btn
           v-if="activeTab === 'edit' && hasChanges"
@@ -259,7 +259,7 @@
           :loading="isSaving"
           @click="saveChanges"
         >
-          Save Changes
+          {{ $t('save_changes') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -268,6 +268,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useDocumentsStore } from '@/stores/documents'
 import type { Document, DocumentType, DocumentStatus } from '@/types/document'
 
@@ -287,8 +288,9 @@ const emit = defineEmits<{
   'document-updated': [document: Document]
 }>()
 
-// Store
+// Store and i18n
 const documentsStore = useDocumentsStore()
+const { t } = useI18n()
 
 // Reactive data
 const activeTab = ref('preview')
@@ -318,10 +320,10 @@ const hasChanges = computed(() => {
 })
 
 const statusOptions = [
-  { title: 'Draft', value: 'DRAFT' },
-  { title: 'Generated', value: 'GENERATED' },
-  { title: 'Published', value: 'PUBLISHED' },
-  { title: 'Archived', value: 'ARCHIVED' }
+  { title: t('draft'), value: 'DRAFT' },
+  { title: t('generated'), value: 'GENERATED' },
+  { title: t('published'), value: 'PUBLISHED' },
+  { title: t('archived'), value: 'ARCHIVED' }
 ]
 
 // Methods
@@ -399,11 +401,11 @@ const printDocument = () => {
           <h1>${props.document.name}</h1>
           <div class="metadata">
             <h3>Document Information</h3>
-            <p><strong>Type:</strong> ${getDocumentTypeLabel(props.document.type)}</p>
-            <p><strong>Status:</strong> ${getStatusLabel(props.document.status)}</p>
-            <p><strong>Version:</strong> ${props.document.version}</p>
-            <p><strong>Created:</strong> ${formatDate(props.document.createdAt)}</p>
-            <p><strong>Last Modified:</strong> ${formatDate(props.document.updatedAt)}</p>
+            <p><strong>${t('type')}:</strong> ${getDocumentTypeLabel(props.document.type)}</p>
+            <p><strong>${t('status')}:</strong> ${getStatusLabel(props.document.status)}</p>
+            <p><strong>${t('version')}:</strong> ${props.document.version}</p>
+            <p><strong>${t('created')}:</strong> ${formatDate(props.document.createdAt)}</p>
+            <p><strong>${t('modified')}:</strong> ${formatDate(props.document.updatedAt)}</p>
           </div>
           <div class="content">
             ${formatDocumentContent(props.document.content)}
@@ -428,9 +430,9 @@ const getDocumentColor = (type?: DocumentType) => {
 
 const getDocumentTypeLabel = (type?: DocumentType) => {
   const labels = {
-    TOS: 'Terms of Service',
-    PRIVACY_POLICY: 'Privacy Policy',
-    CGU: 'Terms & Conditions'
+    TOS: t('terms_of_service'),
+    PRIVACY_POLICY: t('privacy_policy'),
+    CGU: t('terms_conditions')
   }
   return type ? labels[type] : 'Unknown'
 }
@@ -447,10 +449,10 @@ const getStatusColor = (status?: DocumentStatus) => {
 
 const getStatusLabel = (status?: DocumentStatus) => {
   const labels = {
-    DRAFT: 'Draft',
-    GENERATED: 'Generated',
-    PUBLISHED: 'Published',
-    ARCHIVED: 'Archived'
+    DRAFT: t('draft'),
+    GENERATED: t('generated'),
+    PUBLISHED: t('published'),
+    ARCHIVED: t('archived')
   }
   return status ? labels[status] : 'Unknown'
 }

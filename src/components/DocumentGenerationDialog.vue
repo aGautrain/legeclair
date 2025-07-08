@@ -9,10 +9,10 @@
       <v-card-title class="d-flex align-center justify-space-between">
         <div>
           <h2 class="text-h5 font-weight-bold">
-            Generate {{ documentTypeLabel }}
+            {{ $t('generate_document') }} {{ documentTypeLabel }}
           </h2>
           <p class="text-body-2 text-medium-emphasis mt-1">
-            Fill in the details below to generate your document
+            {{ $t('fill_details') }}
           </p>
         </div>
         <v-btn
@@ -28,9 +28,9 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.companyName"
-                label="Company Name"
+                :label="$t('company_name')"
                 variant="outlined"
-                :rules="[v => !!v || 'Company name is required']"
+                :rules="[v => !!v || $t('required_field')]"
                 required
                 prepend-inner-icon="mdi-domain"
               />
@@ -38,9 +38,9 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.domain"
-                label="Website Domain"
+                :label="$t('website_domain')"
                 variant="outlined"
-                :rules="[v => !!v || 'Domain is required']"
+                :rules="[v => !!v || $t('required_field')]"
                 required
                 prepend-inner-icon="mdi-web"
                 placeholder="example.com"
@@ -50,9 +50,9 @@
               <v-select
                 v-model="formData.jurisdiction"
                 :items="jurisdictions"
-                label="Legal Jurisdiction"
+                :label="$t('legal_jurisdiction')"
                 variant="outlined"
-                :rules="[v => !!v || 'Jurisdiction is required']"
+                :rules="[v => !!v || $t('required_field')]"
                 required
                 prepend-inner-icon="mdi-map-marker"
               />
@@ -60,9 +60,9 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.companyAddress"
-                label="Company Address"
+                :label="$t('company_address')"
                 variant="outlined"
-                :rules="[v => !!v || 'Company address is required']"
+                :rules="[v => !!v || $t('required_field')]"
                 required
                 prepend-inner-icon="mdi-map-marker-outline"
               />
@@ -70,12 +70,12 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.contactEmail"
-                label="Contact Email"
+                :label="$t('contact_email')"
                 variant="outlined"
                 type="email"
                 :rules="[
-                  v => !!v || 'Contact email is required',
-                  v => /.+@.+\..+/.test(v) || 'Email must be valid'
+                  v => !!v || $t('required_field'),
+                  v => /.+@.+\..+/.test(v) || $t('invalid_email')
                 ]"
                 required
                 prepend-inner-icon="mdi-email"
@@ -84,9 +84,9 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.contactPhone"
-                label="Contact Phone"
+                :label="$t('contact_phone')"
                 variant="outlined"
-                :rules="[v => !!v || 'Contact phone is required']"
+                :rules="[v => !!v || $t('required_field')]"
                 required
                 prepend-inner-icon="mdi-phone"
               />
@@ -96,17 +96,17 @@
           <!-- Additional fields based on document type -->
           <div v-if="documentType === 'PRIVACY_POLICY'" class="mt-4">
             <v-divider class="mb-4" />
-            <h3 class="text-h6 mb-4">Privacy Policy Specifics</h3>
+            <h3 class="text-h6 mb-4">{{ $t('privacy_policy_specifics') }}</h3>
             <v-row>
               <v-col cols="12" md="6">
                 <v-select
                   v-model="formData.dataTypes"
                   :items="dataTypes"
-                  label="Types of Data Collected"
+                  :label="$t('types_of_data_collected')"
                   variant="outlined"
                   multiple
                   chips
-                  :rules="[v => v.length > 0 || 'Please select at least one data type']"
+                  :rules="[v => v.length > 0 || $t('select_at_least_one')]"
                   required
                 />
               </v-col>
@@ -114,20 +114,20 @@
                 <v-select
                   v-model="formData.dataPurposes"
                   :items="dataPurposes"
-                  label="Data Processing Purposes"
+                  :label="$t('data_processing_purposes')"
                   variant="outlined"
                   multiple
                   chips
-                  :rules="[v => v.length > 0 || 'Please select at least one purpose']"
+                  :rules="[v => v.length > 0 || $t('select_at_least_one')]"
                   required
                 />
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="formData.dataRetention"
-                  label="Data Retention Period"
+                  :label="$t('data_retention_period')"
                   variant="outlined"
-                  :rules="[v => !!v || 'Data retention period is required']"
+                  :rules="[v => !!v || $t('required_field')]"
                   required
                   placeholder="e.g., 2 years"
                 />
@@ -136,7 +136,7 @@
                 <v-select
                   v-model="formData.thirdPartyServices"
                   :items="thirdPartyServices"
-                  label="Third-party Services"
+                  :label="$t('third_party_services')"
                   variant="outlined"
                   multiple
                   chips
@@ -148,14 +148,14 @@
 
           <div v-if="documentType === 'TOS'" class="mt-4">
             <v-divider class="mb-4" />
-            <h3 class="text-h6 mb-4">Terms of Service Specifics</h3>
+            <h3 class="text-h6 mb-4">{{ $t('tos_specifics') }}</h3>
             <v-row>
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="formData.serviceDescription"
-                  label="Service Description"
+                  :label="$t('service_description')"
                   variant="outlined"
-                  :rules="[v => !!v || 'Service description is required']"
+                  :rules="[v => !!v || $t('required_field')]"
                   required
                 />
               </v-col>
@@ -163,18 +163,18 @@
                 <v-select
                   v-model="formData.userTypes"
                   :items="userTypes"
-                  label="User Types"
+                  :label="$t('user_types')"
                   variant="outlined"
                   multiple
                   chips
-                  :rules="[v => v.length > 0 || 'Please select at least one user type']"
+                  :rules="[v => v.length > 0 || $t('select_at_least_one')]"
                   required
                 />
               </v-col>
               <v-col cols="12">
                 <v-textarea
                   v-model="formData.prohibitedActivities"
-                  label="Prohibited Activities"
+                  :label="$t('prohibited_activities')"
                   variant="outlined"
                   rows="3"
                   placeholder="List activities that are not allowed on your platform..."
@@ -185,14 +185,14 @@
 
           <div v-if="documentType === 'CGU'" class="mt-4">
             <v-divider class="mb-4" />
-            <h3 class="text-h6 mb-4">Terms & Conditions Specifics</h3>
+            <h3 class="text-h6 mb-4">{{ $t('cgu_specifics') }}</h3>
             <v-row>
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="formData.productService"
-                  label="Product/Service Name"
+                  :label="$t('product_service_name')"
                   variant="outlined"
-                  :rules="[v => !!v || 'Product/service name is required']"
+                  :rules="[v => !!v || $t('required_field')]"
                   required
                 />
               </v-col>
@@ -200,16 +200,16 @@
                 <v-select
                   v-model="formData.paymentTerms"
                   :items="paymentTerms"
-                  label="Payment Terms"
+                  :label="$t('payment_terms')"
                   variant="outlined"
-                  :rules="[v => !!v || 'Payment terms are required']"
+                  :rules="[v => !!v || $t('required_field')]"
                   required
                 />
               </v-col>
               <v-col cols="12">
                 <v-textarea
                   v-model="formData.refundPolicy"
-                  label="Refund Policy"
+                  :label="$t('refund_policy')"
                   variant="outlined"
                   rows="3"
                   placeholder="Describe your refund policy..."
@@ -227,7 +227,7 @@
           @click="closeDialog"
           :disabled="isGenerating"
         >
-          Cancel
+          {{ $t('cancel') }}
         </v-btn>
         <v-btn
           color="primary"
@@ -236,7 +236,7 @@
           @click="generateDocument"
         >
           <v-icon start>mdi-file-document-plus</v-icon>
-          Generate Document
+          {{ $t('generate_document_btn') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -245,6 +245,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useDocumentsStore } from '@/stores/documents'
 import type { DocumentType, DocumentGenerationConfig } from '@/types/document'
 
@@ -264,8 +265,9 @@ const emit = defineEmits<{
   'document-created': [document: any]
 }>()
 
-// Store
+// Store and i18n
 const documentsStore = useDocumentsStore()
+const { t } = useI18n()
 
 // Reactive data
 const form = ref()
@@ -302,68 +304,68 @@ const dialogVisible = computed({
 
 const documentTypeLabel = computed(() => {
   const labels = {
-    TOS: 'Terms of Service',
-    PRIVACY_POLICY: 'Privacy Policy',
-    CGU: 'Terms & Conditions'
+    TOS: t('terms_of_service'),
+    PRIVACY_POLICY: t('privacy_policy'),
+    CGU: t('terms_conditions')
   }
   return props.documentType ? labels[props.documentType] : 'Document'
 })
 
 const jurisdictions = [
-  'France',
-  'European Union',
-  'United States',
-  'United Kingdom',
-  'Canada',
-  'Australia',
-  'Germany',
-  'Spain',
-  'Italy',
-  'Other'
+  t('france'),
+  t('european_union'),
+  t('united_states'),
+  t('united_kingdom'),
+  t('canada'),
+  t('australia'),
+  t('germany'),
+  t('spain'),
+  t('italy'),
+  t('other')
 ]
 
 const dataTypes = [
-  'Personal Information (name, email, phone)',
-  'Payment Information',
-  'Usage Data',
-  'Cookies and Tracking',
-  'Device Information',
-  'Location Data',
-  'Social Media Data'
+  t('personal_information'),
+  t('payment_information'),
+  t('usage_data'),
+  t('cookies_tracking'),
+  t('device_information'),
+  t('location_data'),
+  t('social_media_data')
 ]
 
 const dataPurposes = [
-  'Service Provision',
-  'Customer Support',
-  'Marketing Communications',
-  'Analytics and Improvement',
-  'Legal Compliance',
-  'Security and Fraud Prevention'
+  t('service_provision'),
+  t('customer_support'),
+  t('marketing_communications'),
+  t('analytics_improvement'),
+  t('legal_compliance'),
+  t('security_fraud_prevention')
 ]
 
 const thirdPartyServices = [
-  'Google Analytics',
-  'Facebook Pixel',
-  'Stripe (Payments)',
-  'Mailchimp (Email)',
-  'Intercom (Support)',
-  'Hotjar (Analytics)',
-  'Cloudflare (CDN)'
+  t('google_analytics'),
+  t('facebook_pixel'),
+  t('stripe_payments'),
+  t('mailchimp_email'),
+  t('intercom_support'),
+  t('hotjar_analytics'),
+  t('cloudflare_cdn')
 ]
 
 const userTypes = [
-  'Individual Users',
-  'Business Users',
-  'Minors (with parental consent)',
-  'International Users'
+  t('individual_users'),
+  t('business_users'),
+  t('minors_parental_consent'),
+  t('international_users')
 ]
 
 const paymentTerms = [
-  'Immediate Payment',
-  'Net 30 Days',
-  'Net 60 Days',
-  'Subscription-based',
-  'Pay-per-use'
+  t('immediate_payment'),
+  t('net_30_days'),
+  t('net_60_days'),
+  t('subscription_based'),
+  t('pay_per_use')
 ]
 
 // Methods
