@@ -102,6 +102,8 @@
                   density="comfortable"
                   clearable
                   @update:model-value="handleSourceTypeFilter"
+                  item-title="label"
+                  item-value="value"
                 />
               </v-col>
 
@@ -115,6 +117,8 @@
                   density="comfortable"
                   clearable
                   @update:model-value="handleStatusFilter"
+                  item-title="label"
+                  item-value="value"
                 />
               </v-col>
 
@@ -128,6 +132,8 @@
                   density="comfortable"
                   clearable
                   @update:model-value="handleSeverityFilter"
+                  item-title="label"
+                  item-value="value"
                 />
               </v-col>
 
@@ -141,6 +147,8 @@
                   density="comfortable"
                   clearable
                   @update:model-value="handleDocumentTypeFilter"
+                  item-title="label"
+                  item-value="value"
                 />
               </v-col>
 
@@ -170,6 +178,8 @@
                       density="comfortable"
                       clearable
                       @update:model-value="handleCategoryFilter"
+                      item-title="label"
+                      item-value="value"
                     />
                   </v-col>
                   <v-col cols="12" md="3">

@@ -6,7 +6,7 @@
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <v-card class="document-view-dialog">
-      <v-card-title class="d-flex align-center justify-space-between">
+      <v-card-title class="d-flex align-center justify-space-between pa-6">
         <div>
           <h2 class="text-h5 font-weight-bold">
             {{ document?.name || 'Document' }}
@@ -38,7 +38,7 @@
         />
       </v-card-title>
 
-      <v-card-text class="pa-0">
+      <v-card-text class="pa-6">
         <v-tabs v-model="activeTab" color="primary" grow>
           <v-tab value="preview">
             <v-icon start>mdi-eye</v-icon>

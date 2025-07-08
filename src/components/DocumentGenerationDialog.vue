@@ -6,7 +6,7 @@
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <v-card>
-      <v-card-title class="d-flex align-center justify-space-between">
+      <v-card-title class="d-flex align-center justify-space-between pa-6">
         <div>
           <h2 class="text-h5 font-weight-bold">
             {{ $t('generate_document') }} {{ documentTypeLabel }}
