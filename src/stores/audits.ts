@@ -9,6 +9,7 @@ import type {
   TableSort,
   PaginationConfig 
 } from '@/types/audit'
+import { SourceType, Severity, Category } from '@/types/audit'
 import type { DocumentType } from '@/types/document'
 
 export const useAuditsStore = defineStore('audits', () => {
@@ -131,7 +132,7 @@ export const useAuditsStore = defineStore('audits', () => {
         {
           id: '1',
           name: 'Terms of Service Review - Legeclair',
-          sourceType: 'WEB',
+          sourceType: SourceType.WEB,
           documentType: 'TOS',
           sourceContent: 'This Terms of Service agreement ("Agreement") is entered into between Legeclair ("Company") and the user ("User") of our services. By accessing or using our services, User agrees to be bound by these terms. The Company reserves the right to modify these terms at any time without notice. User is responsible for maintaining the confidentiality of their account information.',
           correctedContent: 'This Terms of Service agreement ("Agreement") is entered into between Legeclair ("Company") and the user ("User") of our services. By accessing or using our services, the User agrees to be bound by these terms. The Company reserves the right to modify these terms at any time with reasonable notice. The User is responsible for maintaining the confidentiality of their account information.',
@@ -152,8 +153,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'User agrees',
               correctedText: 'the User agrees',
               explanation: 'Add definite article for better clarity and formal tone',
-              severity: 'LOW',
-              category: 'CLARITY',
+              severity: Severity.LOW,
+              category: Category.CLARITY,
               startPosition: 120,
               endPosition: 130,
               createdAt: new Date('2024-01-15')
@@ -163,8 +164,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'without notice',
               correctedText: 'with reasonable notice',
               explanation: 'Legal requirement to provide reasonable notice for terms changes',
-              severity: 'HIGH',
-              category: 'LEGAL',
+              severity: Severity.HIGH,
+              category: Category.LEGAL,
               startPosition: 180,
               endPosition: 195,
               createdAt: new Date('2024-01-15')
@@ -174,8 +175,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'User is responsible',
               correctedText: 'The User is responsible',
               explanation: 'Add definite article for consistency and formal tone',
-              severity: 'LOW',
-              category: 'GRAMMAR',
+              severity: Severity.LOW,
+              category: Category.GRAMMAR,
               startPosition: 220,
               endPosition: 235,
               createdAt: new Date('2024-01-15')
@@ -185,7 +186,7 @@ export const useAuditsStore = defineStore('audits', () => {
         {
           id: '2',
           name: 'Privacy Policy Review - Legeclair',
-          sourceType: 'DOCUMENT',
+          sourceType: SourceType.DOCUMENT,
           documentType: 'PRIVACY_POLICY',
           sourceContent: 'We collect personal information including name, email, and usage data. This information is used to provide our services and may be shared with third parties. We store data for as long as necessary.',
           correctedContent: 'We collect personal information including name, email address, and usage data. This information is used to provide our services and may be shared with third-party service providers under strict data protection agreements. We store personal data only for as long as necessary to fulfill the purposes outlined in this policy.',
@@ -206,8 +207,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'name, email, and usage data',
               correctedText: 'name, email address, and usage data',
               explanation: 'More specific terminology for better clarity',
-              severity: 'MEDIUM',
-              category: 'CLARITY',
+              severity: Severity.MEDIUM,
+              category: Category.CLARITY,
               startPosition: 35,
               endPosition: 55,
               createdAt: new Date('2024-01-18')
@@ -217,8 +218,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'may be shared with third parties',
               correctedText: 'may be shared with third-party service providers under strict data protection agreements',
               explanation: 'GDPR compliance requirement for data sharing transparency',
-              severity: 'CRITICAL',
-              category: 'COMPLIANCE',
+              severity: Severity.CRITICAL,
+              category: Category.COMPLIANCE,
               startPosition: 95,
               endPosition: 125,
               createdAt: new Date('2024-01-18')
@@ -228,8 +229,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'We store data for as long as necessary',
               correctedText: 'We store personal data only for as long as necessary to fulfill the purposes outlined in this policy',
               explanation: 'GDPR requirement for specific data retention periods and purpose limitation',
-              severity: 'CRITICAL',
-              category: 'COMPLIANCE',
+              severity: Severity.CRITICAL,
+              category: Category.COMPLIANCE,
               startPosition: 130,
               endPosition: 165,
               createdAt: new Date('2024-01-18')
@@ -239,7 +240,7 @@ export const useAuditsStore = defineStore('audits', () => {
         {
           id: '3',
           name: 'Website Content Review - Legeclair',
-          sourceType: 'WEB',
+          sourceType: SourceType.WEB,
           documentType: 'TOS',
           sourceContent: 'Legeclair is a legal tech platform that helps businesses create compliant legal documents. Our AI-powered system generates customized legal documents in minutes. We serve clients worldwide and offer 24/7 support.',
           correctedContent: 'Legeclair is a legal technology platform that helps businesses create compliant legal documents. Our AI-powered system generates customized legal documents within minutes. We serve clients worldwide and offer comprehensive support during business hours.',
@@ -260,8 +261,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'legal tech platform',
               correctedText: 'legal technology platform',
               explanation: 'Use full form for better clarity and professionalism',
-              severity: 'LOW',
-              category: 'CLARITY',
+              severity: Severity.LOW,
+              category: Category.CLARITY,
               startPosition: 15,
               endPosition: 30,
               createdAt: new Date('2024-01-22')
@@ -271,8 +272,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: 'in minutes',
               correctedText: 'within minutes',
               explanation: 'More precise time indication',
-              severity: 'LOW',
-              category: 'CLARITY',
+              severity: Severity.LOW,
+              category: Category.CLARITY,
               startPosition: 95,
               endPosition: 105,
               createdAt: new Date('2024-01-22')
@@ -282,8 +283,8 @@ export const useAuditsStore = defineStore('audits', () => {
               originalText: '24/7 support',
               correctedText: 'comprehensive support during business hours',
               explanation: 'More accurate representation of actual support availability',
-              severity: 'MEDIUM',
-              category: 'CLARITY',
+              severity: Severity.MEDIUM,
+              category: Category.CLARITY,
               startPosition: 140,
               endPosition: 150,
               createdAt: new Date('2024-01-22')
@@ -331,8 +332,8 @@ export const useAuditsStore = defineStore('audits', () => {
           originalText: 'sample text',
           correctedText: 'corrected sample text',
           explanation: 'Example correction for demonstration',
-          severity: 'MEDIUM',
-          category: 'CLARITY',
+          severity: Severity.MEDIUM,
+          category: Category.CLARITY,
           startPosition: 0,
           endPosition: 10,
           createdAt: new Date()

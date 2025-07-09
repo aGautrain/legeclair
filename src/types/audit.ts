@@ -1,9 +1,31 @@
 import type { DocumentType } from './document'
 
+// Enums for better type safety
+export enum SourceType {
+  WEB = 'WEB',
+  DOCUMENT = 'DOCUMENT'
+}
+
+export enum Severity {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL'
+}
+
+export enum Category {
+  GRAMMAR = 'GRAMMAR',
+  LEGAL = 'LEGAL',
+  COMPLIANCE = 'COMPLIANCE',
+  CLARITY = 'CLARITY',
+  STRUCTURE = 'STRUCTURE',
+  OTHER = 'OTHER'
+}
+
 export interface Audit {
   id: string
   name: string
-  sourceType: 'WEB' | 'DOCUMENT'
+  sourceType: SourceType
   documentType: DocumentType
   sourceContent: string
   correctedContent: string
@@ -32,8 +54,8 @@ export interface Correction {
   originalText: string
   correctedText: string
   explanation: string
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
-  category: 'GRAMMAR' | 'LEGAL' | 'COMPLIANCE' | 'CLARITY' | 'STRUCTURE' | 'OTHER'
+  severity: Severity
+  category: Category
   startPosition: number
   endPosition: number
   createdAt: Date
@@ -41,17 +63,17 @@ export interface Correction {
 
 export interface AuditFilters {
   search?: string
-  sourceType?: 'WEB' | 'DOCUMENT'
+  sourceType?: SourceType
   documentType?: DocumentType
   status?: AuditStatus
-  severity?: Correction['severity']
-  category?: Correction['category']
+  severity?: Severity
+  category?: Category
   dateFrom?: Date
   dateTo?: Date
 }
 
 export interface AuditCreationConfig {
-  sourceType: 'WEB' | 'DOCUMENT'
+  sourceType: SourceType
   documentType: DocumentType
   sourceContent: string
   sourceName: string

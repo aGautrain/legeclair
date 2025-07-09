@@ -271,31 +271,29 @@
                         {{ getSeverityLabel(correction.severity) }}
                       </v-chip>
                     </template>
-                    <v-list-item-title class="text-body-1 font-weight-medium mb-2">
+                    <v-list-item-title class="text-body-1 font-weight-medium py-2">
                       {{ correction.explanation }}
                     </v-list-item-title>
-                    <v-list-item-subtitle class="text-body-2">
+                    <v-list-item-content class="text-body-2">
                       <div class="correction-details">
                         <div class="mb-2">
-                          <strong>{{ $t('original') }}:</strong>
-                          <span class="text-error">{{ correction.originalText }}</span>
+                          <strong>{{ $t('original') }} : </strong>
+                          <span>{{ correction.originalText }}</span>
                         </div>
                         <div class="mb-2">
-                          <strong>{{ $t('corrected') }}:</strong>
+                          <strong>{{ $t('corrected') }} : </strong>
                           <span class="text-success">{{ correction.correctedText }}</span>
                         </div>
                         <div class="d-flex gap-4">
                           <span class="text-caption">
-                            <v-icon size="16" class="mr-1">mdi-tag</v-icon>
-                            {{ getCategoryLabel(correction.category) }}
-                          </span>
-                          <span class="text-caption">
-                            <v-icon size="16" class="mr-1">mdi-calendar</v-icon>
-                            {{ formatDate(correction.createdAt) }}
+                            <v-chip size="small" variant="outlined">
+                              <v-icon size="16" class="mr-1">mdi-tag</v-icon>
+                              {{ getCategoryLabel(correction.category) }}
+                            </v-chip>
                           </span>
                         </div>
                       </div>
-                    </v-list-item-subtitle>
+                    </v-list-item-content>
                   </v-list-item>
                 </v-list>
               </div>
@@ -493,11 +491,11 @@ const getStatusColor = (status: string) => {
 
 const getStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
-    PENDING: 'Pending',
-    IN_PROGRESS: 'In Progress',
-    COMPLETED: 'Completed',
-    REVIEWED: 'Reviewed',
-    ARCHIVED: 'Archived'
+    PENDING: t('pending'),
+    IN_PROGRESS: t('in_progress'),
+    COMPLETED: t('completed'),
+    REVIEWED: t('reviewed'),
+    ARCHIVED: t('archived')
   }
   return labels[status] || status
 }
@@ -514,21 +512,21 @@ const getSeverityColor = (severity: string) => {
 
 const getSeverityLabel = (severity: string) => {
   const labels: Record<string, string> = {
-    LOW: 'Low',
-    MEDIUM: 'Medium',
-    HIGH: 'High',
-    CRITICAL: 'Critical'
+    LOW: t('low'),
+    MEDIUM: t('medium'),
+    HIGH: t('high'),
+    CRITICAL: t('critical')
   }
   return labels[severity] || severity
 }
 
 const getCategoryLabel = (category: string) => {
   const labels: Record<string, string> = {
-    GRAMMAR: 'Grammar',
-    CLARITY: 'Clarity',
-    LEGAL: 'Legal',
-    COMPLIANCE: 'Compliance',
-    STYLE: 'Style'
+    GRAMMAR: t('grammar'),
+    CLARITY: t('clarity'),
+    LEGAL: t('legal'),
+    COMPLIANCE: t('compliance'),
+    STYLE: t('style')
   }
   return labels[category] || category
 }

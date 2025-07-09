@@ -13,8 +13,6 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     AppTopbar: typeof import('./components/AppTopbar.vue')['default']
     AuditCreationDialog: typeof import('./components/AuditCreationDialog.vue')['default']
-    AuditViewDialog: typeof import('./components/AuditViewDialog.vue')['default']
-    AuditViewPage: typeof import('./components/AuditViewPage.vue')['default']
     DocumentGenerationDialog: typeof import('./components/DocumentGenerationDialog.vue')['default']
     DocumentViewDialog: typeof import('./components/DocumentViewDialog.vue')['default']
     Landing: typeof import('./components/Landing.vue')['default']

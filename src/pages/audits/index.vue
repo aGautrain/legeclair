@@ -458,6 +458,7 @@ import { useI18n } from 'vue-i18n'
 import { useAuditsStore } from '@/stores/audits'
 import { routeUtils } from '@/router'
 import type { Audit, AuditStatus } from '@/types/audit'
+import { SourceType, Severity, Category } from '@/types/audit'
 import type { DocumentType } from '@/types/document'
 import AuditCreationDialog from '@/components/AuditCreationDialog.vue'
 
@@ -468,17 +469,17 @@ const router = useRouter()
 
 // Reactive data
 const searchQuery = ref('')
-const sourceTypeFilter = ref<'WEB' | 'DOCUMENT' | null>(null)
+const sourceTypeFilter = ref<SourceType | null>(null)
 const statusFilter = ref<AuditStatus | null>(null)
-const severityFilter = ref<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | null>(null)
-const categoryFilter = ref<'GRAMMAR' | 'LEGAL' | 'COMPLIANCE' | 'CLARITY' | 'STRUCTURE' | 'OTHER' | null>(null)
+const severityFilter = ref<Severity | null>(null)
+const categoryFilter = ref<Category | null>(null)
 const dateFrom = ref('')
 const dateTo = ref('')
 const showAdvancedFilters = ref(false)
 const showCreateDialog = ref(false)
 const showDeleteDialog = ref(false)
 const showBulkDeleteDialog = ref(false)
-const selectedSourceType = ref<'WEB' | 'DOCUMENT' | null>(null)
+const selectedSourceType = ref<SourceType | null>(null)
 const auditToDelete = ref<Audit | null>(null)
 const showSuccessMessage = ref(false)
 const showErrorMessage = ref(false)
@@ -498,14 +499,14 @@ const {
 
 const actionCards = computed(() => [
   {
-    type: 'WEB' as 'WEB',
+    type: SourceType.WEB,
     title: t('audit_web_source'),
     description: t('audit_web_source_desc'),
     icon: 'mdi-web',
     color: 'primary'
   },
   {
-    type: 'DOCUMENT' as 'DOCUMENT',
+    type: SourceType.DOCUMENT,
     title: t('audit_document_source'),
     description: t('audit_document_source_desc'),
     icon: 'mdi-file-upload',
@@ -541,8 +542,8 @@ const auditStatsCards = computed(() => [
 ])
 
 const sourceTypes = computed(() => [
-  { label: t('source_web'), value: 'WEB' },
-  { label: t('source_document'), value: 'DOCUMENT' }
+  { label: t('source_web'), value: SourceType.WEB },
+  { label: t('source_document'), value: SourceType.DOCUMENT }
 ])
 
 const auditStatuses = computed(() => [
@@ -554,19 +555,19 @@ const auditStatuses = computed(() => [
 ])
 
 const severityLevels = computed(() => [
-  { label: t('low'), value: 'LOW' },
-  { label: t('medium'), value: 'MEDIUM' },
-  { label: t('high'), value: 'HIGH' },
-  { label: t('critical'), value: 'CRITICAL' }
+  { label: t('low'), value: Severity.LOW },
+  { label: t('medium'), value: Severity.MEDIUM },
+  { label: t('high'), value: Severity.HIGH },
+  { label: t('critical'), value: Severity.CRITICAL }
 ])
 
 const correctionCategories = computed(() => [
-  { label: t('grammar'), value: 'GRAMMAR' },
-  { label: t('legal'), value: 'LEGAL' },
-  { label: t('compliance'), value: 'COMPLIANCE' },
-  { label: t('clarity'), value: 'CLARITY' },
-  { label: t('structure'), value: 'STRUCTURE' },
-  { label: t('other'), value: 'OTHER' }
+  { label: t('grammar'), value: Category.GRAMMAR },
+  { label: t('legal'), value: Category.LEGAL },
+  { label: t('compliance'), value: Category.COMPLIANCE },
+  { label: t('clarity'), value: Category.CLARITY },
+  { label: t('structure'), value: Category.STRUCTURE },
+  { label: t('other'), value: Category.OTHER }
 ])
 
 const documentTypes = computed(() => [
@@ -576,19 +577,25 @@ const documentTypes = computed(() => [
 ])
 
 const tableHeaders = computed(() => [
-  { title: t('audit_name'), key: 'name', sortable: true },
-  { title: t('source_type'), key: 'sourceType', sortable: true },
+  { title: t('name'), key: 'name', sortable: true },
+  { title: t('source'), key: 'sourceType', sortable: true },
+  { title: t('type'), key: 'documentType', sortable: true },
   { title: t('status'), key: 'status', sortable: true },
   { title: t('corrections'), key: 'correctionsCount', sortable: false },
   { title: t('created'), key: 'createdAt', sortable: true },
   { title: t('modified'), key: 'updatedAt', sortable: true },
-  { title: t('document_type'), key: 'documentType', sortable: true },
   { title: t('actions'), key: 'actions', sortable: false, width: '200px' }
 ])
 
 // Methods
-const openCreationDialog = (type: DocumentType | 'WEB' | 'DOCUMENT') => {
-  selectedSourceType.value = type
+const openCreationDialog = (type: DocumentType | SourceType) => {
+  if (type === 'TOS' || type === 'PRIVACY_POLICY' || type === 'CGU') {
+    // Handle document type - we need to set a default source type
+    selectedSourceType.value = SourceType.DOCUMENT
+  } else {
+    // Handle source type
+    selectedSourceType.value = type
+  }
   showCreateDialog.value = true
 }
 
@@ -765,21 +772,21 @@ const exportTable = () => {
 }
 
 // Utility functions
-const getSourceTypeColor = (type: DocumentType | 'WEB' | 'DOCUMENT') => {
+const getSourceTypeColor = (type: DocumentType | SourceType) => {
   const colors = {
     TOS: 'primary',
     PRIVACY_POLICY: 'success',
     CGU: 'warning',
-    WEB: 'info',
-    DOCUMENT: 'secondary'
+    [SourceType.WEB]: 'info',
+    [SourceType.DOCUMENT]: 'secondary'
   }
   return colors[type] || 'grey'
 }
 
-const getSourceTypeLabel = (type: 'WEB' | 'DOCUMENT') => {
+const getSourceTypeLabel = (type: SourceType) => {
   const labels = {
-    WEB: t('source_web'),
-    DOCUMENT: t('source_document')
+    [SourceType.WEB]: t('source_web'),
+    [SourceType.DOCUMENT]: t('source_document')
   }
   return labels[type] || type
 }
@@ -813,13 +820,13 @@ const getCorrectionsColor = (count: number) => {
   return 'error'
 }
 
-const getDocumentTypeColor = (type: DocumentType | 'WEB' | 'DOCUMENT') => {
+const getDocumentTypeColor = (type: DocumentType | SourceType) => {
   const colors = {
     TOS: 'primary',
     PRIVACY_POLICY: 'success',
     CGU: 'warning',
-    WEB: 'info',
-    DOCUMENT: 'secondary'
+    [SourceType.WEB]: 'info',
+    [SourceType.DOCUMENT]: 'secondary'
   }
   return colors[type] || 'grey'
 }
@@ -842,15 +849,15 @@ const formatDate = (date: Date) => {
 }
 
 const generateCSV = (audits: Audit[]) => {
-  const headers = ['Name', 'Source Type', 'Status', 'Corrections', 'Created', 'Updated', 'Document Type']
+  const headers = ['Name', 'Source Type', 'Document Type', 'Status', 'Corrections', 'Created', 'Updated']
   const rows = audits.map(audit => [
     audit.name,
     getSourceTypeLabel(audit.sourceType),
+    getDocumentTypeLabel(audit.documentType),
     getStatusLabel(audit.status),
     audit.corrections.length,
     formatDate(audit.createdAt),
     formatDate(audit.updatedAt),
-    getDocumentTypeLabel(audit.documentType)
   ])
   
   return [headers, ...rows]
