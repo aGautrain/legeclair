@@ -456,6 +456,7 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useAuditsStore } from '@/stores/audits'
+import { routeUtils } from '@/router'
 import type { Audit, AuditStatus } from '@/types/audit'
 import type { DocumentType } from '@/types/document'
 import AuditCreationDialog from '@/components/AuditCreationDialog.vue'
@@ -656,11 +657,15 @@ const handleItemsPerPageChange = (itemsPerPage: number) => {
 }
 
 const viewAudit = (audit: Audit) => {
-  router.push(`/audit/${audit.id}`)
+  routeUtils.navigateToAudit(audit.id).catch((error) => {
+    console.error('Failed to navigate to audit:', error)
+  })
 }
 
 const editAudit = (audit: Audit) => {
-  router.push(`/audit/${audit.id}?tab=edit`)
+  routeUtils.navigateToAuditWithTab(audit.id, 'edit').catch((error) => {
+    console.error('Failed to navigate to audit edit:', error)
+  })
 }
 
 const downloadAudit = async (audit: Audit) => {
