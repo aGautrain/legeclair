@@ -157,6 +157,9 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.CLARITY,
               startPosition: 120,
               endPosition: 130,
+              page: 1,
+              lineStart: 3,
+              lineEnd: 3,
               createdAt: new Date('2024-01-15')
             },
             {
@@ -168,6 +171,9 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.LEGAL,
               startPosition: 180,
               endPosition: 195,
+              page: 1,
+              lineStart: 4,
+              lineEnd: 4,
               createdAt: new Date('2024-01-15')
             },
             {
@@ -179,9 +185,14 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.GRAMMAR,
               startPosition: 220,
               endPosition: 235,
+              page: 1,
+              lineStart: 5,
+              lineEnd: 5,
               createdAt: new Date('2024-01-15')
             }
-          ]
+          ],
+          context: 'This audit focuses on French legal requirements for Terms of Service agreements, specifically addressing GDPR compliance and consumer protection laws. Pay special attention to notice requirements and user consent mechanisms.',
+          notes: 'Initial review completed. Need to verify with legal team regarding notice period requirements.'
         },
         {
           id: '2',
@@ -211,6 +222,9 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.CLARITY,
               startPosition: 35,
               endPosition: 55,
+              page: 1,
+              lineStart: 2,
+              lineEnd: 2,
               createdAt: new Date('2024-01-18')
             },
             {
@@ -222,6 +236,9 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.COMPLIANCE,
               startPosition: 95,
               endPosition: 125,
+              page: 1,
+              lineStart: 3,
+              lineEnd: 3,
               createdAt: new Date('2024-01-18')
             },
             {
@@ -233,9 +250,14 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.COMPLIANCE,
               startPosition: 130,
               endPosition: 165,
+              page: 1,
+              lineStart: 4,
+              lineEnd: 5,
               createdAt: new Date('2024-01-18')
             }
-          ]
+          ],
+          context: 'This privacy policy audit must comply with GDPR requirements and French data protection laws. Focus on data retention periods, third-party sharing transparency, and user rights.',
+          notes: 'GDPR compliance review in progress. Need to verify data retention periods with legal team.'
         },
         {
           id: '3',
@@ -265,6 +287,9 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.CLARITY,
               startPosition: 15,
               endPosition: 30,
+              page: 1,
+              lineStart: 1,
+              lineEnd: 1,
               createdAt: new Date('2024-01-22')
             },
             {
@@ -276,6 +301,9 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.CLARITY,
               startPosition: 95,
               endPosition: 105,
+              page: 1,
+              lineStart: 2,
+              lineEnd: 2,
               createdAt: new Date('2024-01-22')
             },
             {
@@ -287,9 +315,13 @@ export const useAuditsStore = defineStore('audits', () => {
               category: Category.CLARITY,
               startPosition: 140,
               endPosition: 150,
+              lineStart: 3,
+              lineEnd: 3,
               createdAt: new Date('2024-01-22')
             }
-          ]
+          ],
+          context: 'Website content review focusing on accuracy and transparency. Ensure all claims about service capabilities and support availability are truthful and verifiable.',
+          notes: 'Marketing team review pending. Need to verify support hours and service capabilities.'
         }
       ]
 
@@ -336,6 +368,9 @@ export const useAuditsStore = defineStore('audits', () => {
           category: Category.CLARITY,
           startPosition: 0,
           endPosition: 10,
+          page: 1,
+          lineStart: 1,
+          lineEnd: 1,
           createdAt: new Date()
         }
       ]
@@ -359,7 +394,9 @@ export const useAuditsStore = defineStore('audits', () => {
           jurisdiction: config.jurisdiction,
           customFields: config.customFields
         },
-        corrections: mockCorrections
+        corrections: mockCorrections,
+        context: '',
+        notes: ''
       }
 
       audits.value.unshift(newAudit)

@@ -35,6 +35,8 @@ export interface Audit {
   version: number
   metadata?: AuditMetadata
   corrections: Correction[]
+  context?: string
+  notes?: string
 }
 
 export type AuditStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'REVIEWED' | 'ARCHIVED'
@@ -58,6 +60,10 @@ export interface Correction {
   category: Category
   startPosition: number
   endPosition: number
+  // Location information
+  page?: number
+  lineStart?: number
+  lineEnd?: number
   createdAt: Date
 }
 

@@ -41,19 +41,11 @@
         <div class="d-flex gap-2">
           <v-btn
             v-if="audit"
-            variant="outlined"
-            prepend-icon="mdi-download"
-            @click="exportComparison"
-          >
-            {{ $t('export') }}
-          </v-btn>
-          <v-btn
-            v-if="audit"
             color="primary"
-            prepend-icon="mdi-pencil"
-            @click="activeTab = 'edit'"
+            prepend-icon="mdi-information"
+            @click="activeTab = 'information'"
           >
-            {{ $t('edit_audit') }}
+            {{ $t('audit_information') }}
           </v-btn>
         </div>
       </div>
@@ -133,7 +125,7 @@
               <v-tab value="corrections">
                 {{ $t('corrections') }} ({{ audit.corrections.length }})
               </v-tab>
-              <v-tab value="edit">{{ $t('edit') }}</v-tab>
+              <v-tab value="information">{{ $t('information') }}</v-tab>
             </v-tabs>
 
             <v-divider />
@@ -284,11 +276,17 @@
                           <strong>{{ $t('corrected') }} : </strong>
                           <span class="text-success">{{ correction.correctedText }}</span>
                         </div>
-                        <div class="d-flex gap-4">
-                          <span class="text-caption">
+                        <div class="d-flex gap-2 align-center">
+                          <span>
                             <v-chip size="small" variant="outlined">
                               <v-icon size="16" class="mr-1">mdi-tag</v-icon>
                               {{ getCategoryLabel(correction.category) }}
+                            </v-chip>
+                          </span>
+                          <span v-if="correction.page || correction.lineStart">
+                            <v-chip size="small" variant="outlined">
+                              <v-icon size="16" class="mr-1">mdi-map-marker</v-icon>
+                              {{ formatLocationInfo(correction) }}
                             </v-chip>
                           </span>
                         </div>
@@ -298,15 +296,64 @@
                 </v-list>
               </div>
 
-              <!-- Edit Tab -->
-              <div v-else-if="activeTab === 'edit'" class="edit-view">
-                <h3 class="text-h6 font-weight-semibold mb-4">{{ $t('edit_audit') }}</h3>
-                <p class="text-body-2 text-medium-emphasis mb-6">
-                  {{ $t('edit_audit_description') }}
-                </p>
-                <!-- Edit form would go here -->
-                <v-card variant="outlined" class="pa-6">
-                  <p class="text-body-1">{{ $t('edit_functionality_coming_soon') }}</p>
+              <!-- Information Tab -->
+              <div v-else-if="activeTab === 'information'" class="information-view">
+                <h3 class="text-h6 font-weight-semibold mb-4">{{ $t('audit_information') }}</h3>
+                
+                <!-- Context Section -->
+                <v-card variant="outlined" class="mb-6">
+                  <v-card-title class="d-flex align-center pa-4">
+                    <v-icon color="primary" class="mr-2">mdi-lightbulb-outline</v-icon>
+                    {{ $t('audit_context') }}
+                  </v-card-title>
+                  <v-card-subtitle>
+                    {{ $t('context_description') }}
+                  </v-card-subtitle>
+                  <v-card-text class="pa-4">
+                    <v-textarea
+                      :model-value="audit.context || ''"
+                      readonly
+                      variant="outlined"
+                      :placeholder="$t('no_context_provided')"
+                      rows="6"
+                      auto-grow
+                      hide-details
+                      class="context-textarea"
+                    />
+                  </v-card-text>
+                </v-card>
+
+                <!-- Notes Section -->
+                <v-card variant="outlined">
+                  <v-card-title class="d-flex align-center pa-4">
+                    <v-icon color="secondary" class="mr-2">mdi-note-text</v-icon>
+                    {{ $t('audit_notes') }}
+                  </v-card-title>
+                  <v-card-subtitle>
+                    {{ $t('audit_notes_description') }}
+                  </v-card-subtitle>
+                  <v-card-text class="pa-4">
+                    <v-textarea
+                      v-model="auditNotes"
+                      variant="outlined"
+                      :placeholder="$t('add_notes_placeholder')"
+                      rows="8"
+                      auto-grow
+                      hide-details
+                      class="notes-textarea"
+                    />
+                    <div class="d-flex justify-end mt-3">
+                      <v-btn
+                        color="primary"
+                        size="small"
+                        @click="saveNotes"
+                        :loading="savingNotes"
+                        :disabled="!notesChanged"
+                      >
+                        {{ $t('save_notes') }}
+                      </v-btn>
+                    </div>
+                  </v-card-text>
                 </v-card>
               </div>
             </div>
@@ -323,7 +370,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuditsStore } from '@/stores/audits'
 import { routeUtils } from '@/router'
-import type { Audit } from '@/types/audit'
+import type { Audit, SourceType } from '@/types/audit'
 
 // Route and store
 const route = useRoute()
@@ -338,6 +385,9 @@ const activeTab = ref('comparison')
 const showHighlighting = ref(true)
 const copiedOriginal = ref(false)
 const copiedCorrected = ref(false)
+const auditNotes = ref('')
+const savingNotes = ref(false)
+const notesChanged = ref(false)
 
 // Computed properties
 const highlightedOriginalContent = computed(() => {
@@ -393,9 +443,12 @@ const fetchAuditData = async () => {
     const fetchedAudit = await auditsStore.fetchAudit(auditId)
     if (fetchedAudit) {
       audit.value = fetchedAudit
+      // Initialize notes
+      auditNotes.value = fetchedAudit.notes || ''
+      notesChanged.value = false
       // Set initial tab based on query parameter
-      if (route.query.tab === 'edit') {
-        activeTab.value = 'edit'
+      if (route.query.tab === 'information') {
+        activeTab.value = 'information'
       }
     } else {
       error.value = t('audit_not_found')
@@ -455,25 +508,36 @@ const copyContent = async (type: 'original' | 'corrected') => {
   }
 }
 
+const saveNotes = async () => {
+  if (!audit.value || !notesChanged.value) return
+  
+  savingNotes.value = true
+  try {
+    // Update the audit notes in the store
+    const updatedAudit = await auditsStore.updateAudit(audit.value.id, { notes: auditNotes.value })
+    audit.value.notes = updatedAudit.notes
+    notesChanged.value = false
+  } catch (err) {
+    console.error('Failed to save notes:', err)
+    // You might want to show a toast notification here
+  } finally {
+    savingNotes.value = false
+  }
+}
+
 // Utility functions
-const getSourceTypeColor = (sourceType: string) => {
+const getSourceTypeColor = (sourceType: SourceType) => {
   const colors: Record<string, string> = {
     WEB: 'primary',
     DOCUMENT: 'secondary',
-    TOS: 'info',
-    PRIVACY_POLICY: 'warning',
-    CGU: 'success'
   }
   return colors[sourceType] || 'grey'
 }
 
-const getSourceTypeLabel = (sourceType: string) => {
+const getSourceTypeLabel = (sourceType: SourceType) => {
   const labels: Record<string, string> = {
-    WEB: 'Web Content',
-    DOCUMENT: 'Document',
-    TOS: 'Terms of Service',
-    PRIVACY_POLICY: 'Privacy Policy',
-    CGU: 'General Terms'
+    WEB: t('source_web'),
+    DOCUMENT: t('source_document'),
   }
   return labels[sourceType] || sourceType
 }
@@ -531,6 +595,21 @@ const getCategoryLabel = (category: string) => {
   return labels[category] || category
 }
 
+const formatLocationInfo = (correction: any) => {
+  const parts = []
+  if (correction.page) {
+    parts.push(`${t('page')} ${correction.page}`)
+  }
+  if (correction.lineStart) {
+    if (correction.lineEnd && correction.lineEnd !== correction.lineStart) {
+      parts.push(`${t('line')} ${correction.lineStart}-${correction.lineEnd}`)
+    } else {
+      parts.push(`${t('line')} ${correction.lineStart}`)
+    }
+  }
+  return parts.join(', ')
+}
+
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -551,6 +630,13 @@ watch(() => route.params, (newParams) => {
     fetchAuditData()
   }
 }, { deep: true })
+
+// Watch for notes changes
+watch(auditNotes, (newNotes) => {
+  if (audit.value) {
+    notesChanged.value = newNotes !== (audit.value.notes || '')
+  }
+})
 </script>
 
 <style scoped lang="sass">
@@ -594,4 +680,16 @@ watch(() => route.params, (newParams) => {
 
 .tab-content
   min-height: 400px
+
+.information-view
+  .context-textarea
+    :deep(.v-field__input)
+      background-color: rgba(0, 0, 0, 0.04)
+      cursor: not-allowed
+    :deep(.v-field)
+      opacity: 0.8
+
+.notes-textarea
+  :deep(.v-field__input)
+    min-height: 120px
 </style> 
