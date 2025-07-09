@@ -302,6 +302,20 @@ export const useAuditsStore = defineStore('audits', () => {
     }
   }
 
+  const fetchAudit = async (id: string): Promise<Audit | null> => {
+    try {
+      // Simulate API call - replace with actual API endpoint
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      // Find audit in existing data or return null
+      const audit = audits.value.find(a => a.id === id)
+      return audit || null
+    } catch (error) {
+      console.error('Error fetching audit:', error)
+      return null
+    }
+  }
+
   const createAudit = async (config: AuditCreationConfig): Promise<Audit> => {
     loading.value = true
     error.value = null
@@ -462,7 +476,7 @@ export const useAuditsStore = defineStore('audits', () => {
     selectedAudits.value = paginatedAudits.value.map(audit => audit.id)
   }
 
-  return {
+    return {
     // State
     audits,
     loading,
@@ -471,14 +485,15 @@ export const useAuditsStore = defineStore('audits', () => {
     sort,
     pagination,
     selectedAudits,
-
+    
     // Getters
     filteredAudits,
     paginatedAudits,
     auditStats,
-
+    
     // Actions
     fetchAudits,
+    fetchAudit,
     createAudit,
     updateAudit,
     deleteAudit,

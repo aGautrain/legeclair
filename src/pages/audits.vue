@@ -399,12 +399,7 @@
       @audit-created="handleAuditCreated"
     />
 
-    <!-- View/Edit Audit Dialog -->
-    <AuditViewDialog
-      v-model="showViewDialog"
-      :audit="selectedAudit"
-      @audit-updated="handleAuditUpdated"
-    />
+
 
     <!-- Delete Confirmation Dialog -->
     <v-dialog v-model="showDeleteDialog" max-width="400">
@@ -457,17 +452,18 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useAuditsStore } from '@/stores/audits'
 import type { Audit, AuditStatus } from '@/types/audit'
 import type { DocumentType } from '@/types/document'
 import AuditCreationDialog from '@/components/AuditCreationDialog.vue'
-import AuditViewDialog from '@/components/AuditViewDialog.vue'
 
 // Store and i18n
 const auditsStore = useAuditsStore()
 const { t } = useI18n()
+const router = useRouter()
 
 // Reactive data
 const searchQuery = ref('')
@@ -479,11 +475,9 @@ const dateFrom = ref('')
 const dateTo = ref('')
 const showAdvancedFilters = ref(false)
 const showCreateDialog = ref(false)
-const showViewDialog = ref(false)
 const showDeleteDialog = ref(false)
 const showBulkDeleteDialog = ref(false)
 const selectedSourceType = ref<'WEB' | 'DOCUMENT' | null>(null)
-const selectedAudit = ref<Audit | null>(null)
 const auditToDelete = ref<Audit | null>(null)
 const showSuccessMessage = ref(false)
 const showErrorMessage = ref(false)
@@ -662,13 +656,11 @@ const handleItemsPerPageChange = (itemsPerPage: number) => {
 }
 
 const viewAudit = (audit: Audit) => {
-  selectedAudit.value = audit
-  showViewDialog.value = true
+  router.push(`/audit/${audit.id}`)
 }
 
 const editAudit = (audit: Audit) => {
-  selectedAudit.value = audit
-  showViewDialog.value = true
+  router.push(`/audit/${audit.id}?tab=edit`)
 }
 
 const downloadAudit = async (audit: Audit) => {
@@ -751,10 +743,7 @@ const handleAuditCreated = (audit: Audit) => {
   successMessage.value = t('audit_created_successfully')
 }
 
-const handleAuditUpdated = (audit: Audit) => {
-  showSuccessMessage.value = true
-  successMessage.value = t('audit_updated_successfully')
-}
+
 
 const exportTable = () => {
   // Implement CSV export functionality

@@ -26,13 +26,14 @@
               />
             </v-col>
 
-            <!-- Source Name -->
+            <!-- Document Type -->
             <v-col cols="12" md="6">
-              <v-text-field
-                v-model="formData.sourceName"
-                :label="$t('source_name')"
+              <v-select
+                v-model="formData.documentType"
+                :label="$t('document_type')"
+                :items="documentTypeOptions"
                 variant="outlined"
-                :rules="[v => !!v || $t('source_name_required')]"
+                :rules="[v => !!v || $t('document_type_required')]"
                 required
               />
             </v-col>
@@ -116,17 +117,18 @@
               />
             </v-col>
 
-            <!-- Document Type -->
+            <!-- Source Name -->
             <v-col cols="12">
-              <v-select
-                v-model="formData.documentType"
-                :label="$t('document_type')"
-                :items="documentTypeOptions"
+              <v-text-field
+                v-model="formData.sourceName"
+                :label="$t('audit_name')"
                 variant="outlined"
-                :rules="[v => !!v || $t('document_type_required')]"
+                :rules="[v => !!v || $t('audit_name_required')]"
                 required
               />
             </v-col>
+
+            
           </v-row>
         </v-form>
       </v-card-text>

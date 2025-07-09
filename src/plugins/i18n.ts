@@ -162,6 +162,7 @@ const messages = {
     create_audit_description: "Analysez un document ou du contenu pour identifier les problèmes de conformité",
     source_name: "Nom de la source",
     source_name_required: "Le nom de la source est requis",
+    audit_name_required: "Le nom de l'audit est requis",
     content_too_short: "Le contenu doit contenir au moins 50 caractères",
     additional_notes: "Notes supplémentaires",
     notes_placeholder: "Ajoutez des notes ou commentaires...",
@@ -301,6 +302,13 @@ const messages = {
     medium: "Moyenne",
     high: "Élevée",
     critical: "Critique",
+    invalid_audit_id: "ID d'audit invalide",
+    audit_not_found: "Audit introuvable",
+    failed_to_load_audit: "Échec du chargement de l'audit",
+    audit_comparison_report: "Rapport de comparaison d'audit",
+    original_content_export: "CONTENU ORIGINAL:",
+    corrected_content_export: "CONTENU CORRIGÉ:",
+    corrections_export: "CORRECTIONS:",
   },
   en: {
     home: 'Home',
@@ -463,6 +471,7 @@ const messages = {
     create_audit_description: "Analyze a document or content to identify compliance issues",
     source_name: "Source Name",
     source_name_required: "Source name is required",
+    audit_name_required: "Audit name is required",
     content_too_short: "Content must be at least 50 characters",
     additional_notes: "Additional Notes",
     notes_placeholder: "Add notes or comments...",
@@ -601,7 +610,14 @@ const messages = {
     medium: "Medium",
     high: "High",
     critical: "Critical",
-  },
+    invalid_audit_id: "Invalid audit ID",
+    audit_not_found: "Audit not found",
+    failed_to_load_audit: "Failed to load audit",
+    audit_comparison_report: "Audit Comparison Report",
+    original_content_export: "ORIGINAL CONTENT:",
+    corrected_content_export: "CORRECTED CONTENT:",
+    corrections_export: "CORRECTIONS:",
+  }
 }
 
 const i18n = createI18n({
