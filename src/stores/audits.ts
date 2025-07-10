@@ -11,6 +11,7 @@ import type { DocumentType } from "@/types/document";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { Category, Severity, SourceType } from "@/types/audit";
+import { auditsAPI } from "@/services/api";
 
 export const useAuditsStore = defineStore("audits", () => {
   // State
@@ -149,232 +150,60 @@ export const useAuditsStore = defineStore("audits", () => {
     error.value = null;
 
     try {
-      // Simulate API call - replace with actual API endpoint
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const params = {
+        page: pagination.value.page,
+        itemsPerPage: pagination.value.itemsPerPage,
+        search: filters.value.search,
+        sourceType: filters.value.sourceType,
+        documentType: filters.value.documentType,
+        status: filters.value.status,
+        severity: filters.value.severity,
+        category: filters.value.category,
+        dateFrom: filters.value.dateFrom?.toISOString(),
+        dateTo: filters.value.dateTo?.toISOString(),
+        sortKey: sort.value.key,
+        sortOrder: sort.value.order,
+      };
 
-      // Mock data for demonstration
-      const mockAudits: Audit[] = [
-        {
-          id: "1",
-          name: "Terms of Service Review - Legeclair",
-          sourceType: SourceType.WEB,
-          documentType: "TOS",
-          sourceContent:
-            'This Terms of Service agreement ("Agreement") is entered into between Legeclair ("Company") and the user ("User") of our services. By accessing or using our services, User agrees to be bound by these terms. The Company reserves the right to modify these terms at any time without notice. User is responsible for maintaining the confidentiality of their account information.',
-          correctedContent:
-            'This Terms of Service agreement ("Agreement") is entered into between Legeclair ("Company") and the user ("User") of our services. By accessing or using our services, the User agrees to be bound by these terms. The Company reserves the right to modify these terms at any time with reasonable notice. The User is responsible for maintaining the confidentiality of their account information.',
-          status: "COMPLETED",
-          createdAt: new Date("2024-01-15"),
-          updatedAt: new Date("2024-01-20"),
-          version: 1,
-          metadata: {
-            sourceName: "Legeclair TOS",
-            companyName: "Legeclair",
-            domain: "legeclair.com",
-            jurisdiction: "France",
-            reviewer: "Legal Team",
-          },
-          corrections: [
-            {
-              id: "1-1",
-              originalText: "User agrees",
-              correctedText: "the User agrees",
-              explanation:
-                "Add definite article for better clarity and formal tone",
-              severity: Severity.LOW,
-              category: Category.CLARITY,
-              startPosition: 120,
-              endPosition: 130,
-              page: 1,
-              lineStart: 3,
-              lineEnd: 3,
-              createdAt: new Date("2024-01-15"),
-            },
-            {
-              id: "1-2",
-              originalText: "without notice",
-              correctedText: "with reasonable notice",
-              explanation:
-                "Legal requirement to provide reasonable notice for terms changes",
-              severity: Severity.HIGH,
-              category: Category.LEGAL,
-              startPosition: 180,
-              endPosition: 195,
-              page: 1,
-              lineStart: 4,
-              lineEnd: 4,
-              createdAt: new Date("2024-01-15"),
-            },
-            {
-              id: "1-3",
-              originalText: "User is responsible",
-              correctedText: "The User is responsible",
-              explanation:
-                "Add definite article for consistency and formal tone",
-              severity: Severity.LOW,
-              category: Category.GRAMMAR,
-              startPosition: 220,
-              endPosition: 235,
-              page: 1,
-              lineStart: 5,
-              lineEnd: 5,
-              createdAt: new Date("2024-01-15"),
-            },
-          ],
-          context:
-            "This audit focuses on French legal requirements for Terms of Service agreements, specifically addressing GDPR compliance and consumer protection laws. Pay special attention to notice requirements and user consent mechanisms.",
-          notes:
-            "Initial review completed. Need to verify with legal team regarding notice period requirements.",
-        },
-        {
-          id: "2",
-          name: "Privacy Policy Review - Legeclair",
-          sourceType: SourceType.DOCUMENT,
-          documentType: "PRIVACY_POLICY",
-          sourceContent:
-            "We collect personal information including name, email, and usage data. This information is used to provide our services and may be shared with third parties. We store data for as long as necessary.",
-          correctedContent:
-            "We collect personal information including name, email address, and usage data. This information is used to provide our services and may be shared with third-party service providers under strict data protection agreements. We store personal data only for as long as necessary to fulfill the purposes outlined in this policy.",
-          status: "IN_PROGRESS",
-          createdAt: new Date("2024-01-18"),
-          updatedAt: new Date("2024-01-18"),
-          version: 1,
-          metadata: {
-            sourceName: "Legeclair Privacy Policy",
-            companyName: "Legeclair",
-            domain: "legeclair.com",
-            jurisdiction: "EU",
-            reviewer: "Privacy Officer",
-          },
-          corrections: [
-            {
-              id: "2-1",
-              originalText: "name, email, and usage data",
-              correctedText: "name, email address, and usage data",
-              explanation: "More specific terminology for better clarity",
-              severity: Severity.MEDIUM,
-              category: Category.CLARITY,
-              startPosition: 35,
-              endPosition: 55,
-              page: 1,
-              lineStart: 2,
-              lineEnd: 2,
-              createdAt: new Date("2024-01-18"),
-            },
-            {
-              id: "2-2",
-              originalText: "may be shared with third parties",
-              correctedText:
-                "may be shared with third-party service providers under strict data protection agreements",
-              explanation:
-                "GDPR compliance requirement for data sharing transparency",
-              severity: Severity.CRITICAL,
-              category: Category.COMPLIANCE,
-              startPosition: 95,
-              endPosition: 125,
-              page: 1,
-              lineStart: 3,
-              lineEnd: 3,
-              createdAt: new Date("2024-01-18"),
-            },
-            {
-              id: "2-3",
-              originalText: "We store data for as long as necessary",
-              correctedText:
-                "We store personal data only for as long as necessary to fulfill the purposes outlined in this policy",
-              explanation:
-                "GDPR requirement for specific data retention periods and purpose limitation",
-              severity: Severity.CRITICAL,
-              category: Category.COMPLIANCE,
-              startPosition: 130,
-              endPosition: 165,
-              page: 1,
-              lineStart: 4,
-              lineEnd: 5,
-              createdAt: new Date("2024-01-18"),
-            },
-          ],
-          context:
-            "This privacy policy audit must comply with GDPR requirements and French data protection laws. Focus on data retention periods, third-party sharing transparency, and user rights.",
-          notes:
-            "GDPR compliance review in progress. Need to verify data retention periods with legal team.",
-        },
-        {
-          id: "3",
-          name: "Website Content Review - Legeclair",
-          sourceType: SourceType.WEB,
-          documentType: "TOS",
-          sourceContent:
-            "Legeclair is a legal tech platform that helps businesses create compliant legal documents. Our AI-powered system generates customized legal documents in minutes. We serve clients worldwide and offer 24/7 support.",
-          correctedContent:
-            "Legeclair is a legal technology platform that helps businesses create compliant legal documents. Our AI-powered system generates customized legal documents within minutes. We serve clients worldwide and offer comprehensive support during business hours.",
-          status: "PENDING",
-          createdAt: new Date("2024-01-22"),
-          updatedAt: new Date("2024-01-22"),
-          version: 1,
-          metadata: {
-            sourceName: "Legeclair Homepage",
-            sourceUrl: "https://legeclair.com",
-            companyName: "Legeclair",
-            domain: "legeclair.com",
-            reviewer: "Marketing Team",
-          },
-          corrections: [
-            {
-              id: "3-1",
-              originalText: "legal tech platform",
-              correctedText: "legal technology platform",
-              explanation:
-                "Use full form for better clarity and professionalism",
-              severity: Severity.LOW,
-              category: Category.CLARITY,
-              startPosition: 15,
-              endPosition: 30,
-              page: 1,
-              lineStart: 1,
-              lineEnd: 1,
-              createdAt: new Date("2024-01-22"),
-            },
-            {
-              id: "3-2",
-              originalText: "in minutes",
-              correctedText: "within minutes",
-              explanation: "More precise time indication",
-              severity: Severity.LOW,
-              category: Category.CLARITY,
-              startPosition: 95,
-              endPosition: 105,
-              page: 1,
-              lineStart: 2,
-              lineEnd: 2,
-              createdAt: new Date("2024-01-22"),
-            },
-            {
-              id: "3-3",
-              originalText: "24/7 support",
-              correctedText: "comprehensive support during business hours",
-              explanation:
-                "More accurate representation of actual support availability",
-              severity: Severity.MEDIUM,
-              category: Category.CLARITY,
-              startPosition: 140,
-              endPosition: 150,
-              lineStart: 3,
-              lineEnd: 3,
-              createdAt: new Date("2024-01-22"),
-            },
-          ],
-          context:
-            "Website content review focusing on accuracy and transparency. Ensure all claims about service capabilities and support availability are truthful and verifiable.",
-          notes:
-            "Marketing team review pending. Need to verify support hours and service capabilities.",
-        },
-      ];
+      const response = await auditsAPI.getAudits(params);
 
-      audits.value = mockAudits;
-      pagination.value.totalItems = audits.value.length;
+      if (response.success && response.data) {
+        audits.value = response.data.data.map((audit: any) => ({
+          id: audit._id,
+          name: audit.name,
+          sourceType: audit.sourceType,
+          documentType: audit.documentType,
+          sourceContent: audit.sourceContent,
+          correctedContent: audit.correctedContent,
+          status: audit.status,
+          createdAt: new Date(audit.createdAt),
+          updatedAt: new Date(audit.updatedAt),
+          version: audit.version,
+          metadata: audit.metadata,
+          corrections: audit.corrections.map((correction: any) => ({
+            id: correction._id,
+            originalText: correction.originalText,
+            correctedText: correction.correctedText,
+            explanation: correction.explanation,
+            severity: correction.severity,
+            category: correction.category,
+            startPosition: correction.startPosition,
+            endPosition: correction.endPosition,
+            page: correction.page,
+            lineStart: correction.lineStart,
+            lineEnd: correction.lineEnd,
+            createdAt: new Date(correction.createdAt),
+          })),
+          context: audit.context,
+          notes: audit.notes,
+        }));
+        pagination.value.totalItems = response.data.pagination.totalItems;
+      } else {
+        throw new Error(response.error || "Failed to fetch audits");
+      }
     } catch (error_) {
-      error.value = "Failed to fetch audits";
+      error.value =
+        error_ instanceof Error ? error_.message : "Failed to fetch audits";
       console.error("Error fetching audits:", error_);
     } finally {
       loading.value = false;
@@ -383,12 +212,15 @@ export const useAuditsStore = defineStore("audits", () => {
 
   const fetchAudit = async (id: string): Promise<Audit | null> => {
     try {
-      // Simulate API call - replace with actual API endpoint
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await auditsAPI.getAudit(id);
 
-      // Find audit in existing data or return null
-      const audit = audits.value.find((a) => a.id === id);
-      return audit || null;
+      if (response.success && response.data) {
+        const audit = response.data.audit;
+        return audit;
+      } else {
+        console.error("Error fetching audit:", response.message);
+        return null;
+      }
     } catch (error) {
       console.error("Error fetching audit:", error);
       return null;
@@ -400,55 +232,26 @@ export const useAuditsStore = defineStore("audits", () => {
     error.value = null;
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Generate mock corrections based on content analysis
-      const mockCorrections: Correction[] = [
-        {
-          id: `${Date.now()}-1`,
-          originalText: "sample text",
-          correctedText: "corrected sample text",
-          explanation: "Example correction for demonstration",
-          severity: Severity.MEDIUM,
-          category: Category.CLARITY,
-          startPosition: 0,
-          endPosition: 10,
-          page: 1,
-          lineStart: 1,
-          lineEnd: 1,
-          createdAt: new Date(),
-        },
-      ];
-
-      const newAudit: Audit = {
-        id: Date.now().toString(),
-        name: `Audit - ${config.sourceName}`,
+      const response = await auditsAPI.createAudit({
         sourceType: config.sourceType,
         documentType: config.documentType,
         sourceContent: config.sourceContent,
-        correctedContent: config.sourceContent, // Initially same as source
-        status: "PENDING",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        version: 1,
-        metadata: {
-          sourceName: config.sourceName,
-          sourceUrl: config.sourceUrl,
-          companyName: config.companyName,
-          domain: config.domain,
-          jurisdiction: config.jurisdiction,
-          customFields: config.customFields,
-        },
-        corrections: mockCorrections,
-        context: "",
-        notes: "",
-      };
+        sourceName: config.sourceName,
+        sourceUrl: config.sourceUrl,
+        companyName: config.companyName,
+        domain: config.domain,
+        jurisdiction: config.jurisdiction,
+        customFields: config.customFields,
+      });
 
-      audits.value.unshift(newAudit);
-      pagination.value.totalItems = audits.value.length;
-
-      return newAudit;
+      if (response.success && response.data) {
+        const newAudit = response.data.audit;
+        audits.value.unshift(newAudit);
+        pagination.value.totalItems = audits.value.length;
+        return newAudit;
+      } else {
+        throw new Error(response.message || "Failed to create audit");
+      }
     } catch (error_) {
       error.value = "Failed to create audit";
       console.error("Error creating audit:", error_);
@@ -467,32 +270,19 @@ export const useAuditsStore = defineStore("audits", () => {
     error.value = null;
 
     try {
-      // Find the original audit
-      const originalAudit = audits.value.find((a) => a.id === auditId);
-      if (!originalAudit) {
-        throw new Error("Original audit not found");
+      const response = await auditsAPI.createNewVersion(auditId, {
+        feedback,
+        newContext,
+      });
+
+      if (response.success && response.data) {
+        const newVersion = response.data.audit;
+        audits.value.unshift(newVersion);
+        pagination.value.totalItems = audits.value.length;
+        return newVersion;
+      } else {
+        throw new Error(response.message || "Failed to create new version");
       }
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Create new version with incremented version number
-      const newVersion: Audit = {
-        ...originalAudit,
-        id: Date.now().toString(),
-        name: `${originalAudit.name} (v${originalAudit.version + 1})`,
-        version: originalAudit.version + 1,
-        status: "PENDING",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        context: newContext || originalAudit.context,
-        notes: `Version request feedback: ${feedback}`,
-      };
-
-      audits.value.unshift(newVersion);
-      pagination.value.totalItems = audits.value.length;
-
-      return newVersion;
     } catch (error_) {
       error.value = "Failed to create new version";
       console.error("Error creating new version:", error_);
@@ -510,20 +300,18 @@ export const useAuditsStore = defineStore("audits", () => {
     error.value = null;
 
     try {
-      const index = audits.value.findIndex((audit) => audit.id === id);
-      if (index === -1) {
-        throw new Error("Audit not found");
+      const response = await auditsAPI.updateAudit(id, updates);
+
+      if (response.success && response.data) {
+        const updatedAudit = response.data.audit;
+        const index = audits.value.findIndex((audit) => audit.id === id);
+        if (index !== -1) {
+          audits.value[index] = updatedAudit;
+        }
+        return updatedAudit;
+      } else {
+        throw new Error(response.message || "Failed to update audit");
       }
-
-      const updatedAudit = {
-        ...audits.value[index],
-        ...updates,
-        updatedAt: new Date(),
-        version: audits.value[index].version + 1,
-      };
-
-      audits.value[index] = updatedAudit;
-      return updatedAudit;
     } catch (error_) {
       error.value = "Failed to update audit";
       console.error("Error updating audit:", error_);
@@ -538,18 +326,22 @@ export const useAuditsStore = defineStore("audits", () => {
     error.value = null;
 
     try {
-      const index = audits.value.findIndex((audit) => audit.id === id);
-      if (index === -1) {
-        throw new Error("Audit not found");
-      }
+      const response = await auditsAPI.deleteAudit(id);
 
-      audits.value.splice(index, 1);
-      pagination.value.totalItems = audits.value.length;
+      if (response.success) {
+        const index = audits.value.findIndex((audit) => audit.id === id);
+        if (index !== -1) {
+          audits.value.splice(index, 1);
+          pagination.value.totalItems = audits.value.length;
+        }
 
-      // Remove from selected audits if present
-      const selectedIndex = selectedAudits.value.indexOf(id);
-      if (selectedIndex !== -1) {
-        selectedAudits.value.splice(selectedIndex, 1);
+        // Remove from selected audits if present
+        const selectedIndex = selectedAudits.value.indexOf(id);
+        if (selectedIndex !== -1) {
+          selectedAudits.value.splice(selectedIndex, 1);
+        }
+      } else {
+        throw new Error(response.message || "Failed to delete audit");
       }
     } catch (error_) {
       error.value = "Failed to delete audit";
@@ -565,9 +357,15 @@ export const useAuditsStore = defineStore("audits", () => {
     error.value = null;
 
     try {
-      audits.value = audits.value.filter((audit) => !ids.includes(audit.id));
-      pagination.value.totalItems = audits.value.length;
-      selectedAudits.value = [];
+      const response = await auditsAPI.bulkDeleteAudits(ids);
+
+      if (response.success) {
+        audits.value = audits.value.filter((audit) => !ids.includes(audit.id));
+        pagination.value.totalItems = audits.value.length;
+        selectedAudits.value = [];
+      } else {
+        throw new Error(response.message || "Failed to delete audits");
+      }
     } catch (error_) {
       error.value = "Failed to delete audits";
       console.error("Error bulk deleting audits:", error_);

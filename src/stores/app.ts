@@ -1,6 +1,7 @@
 // Utilities
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { authAPI } from "@/services/api";
 
 // Types
 interface User {
@@ -99,41 +100,41 @@ export const useAppStore = defineStore("app", () => {
     error.value = null;
 
     try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await authAPI.login(credentials);
 
-      // Mock authentication logic
-      const foundUser = mockUsers.find((u) => u.email === credentials.email);
+      if (response.success && response.data) {
+        const { user: userData, token } = response.data;
 
-      if (!foundUser) {
-        throw new Error("Invalid email or password");
-      }
+        // Set user and authentication state
+        user.value = {
+          id: userData._id,
+          username: userData.username,
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          avatar: userData.avatar,
+          role: userData.role,
+          createdAt: new Date(userData.createdAt),
+          lastLoginAt: new Date(userData.lastLoginAt),
+          credits: userData.credits,
+        };
+        isAuthenticated.value = true;
+        sessionToken.value = token;
 
-      // Mock password validation (in real app, this would be server-side)
-      const mockPassword = "password123"; // All mock users have this password
-      if (credentials.password !== mockPassword) {
-        throw new Error("Invalid email or password");
-      }
+        // Store in localStorage if remember is true
+        if (credentials.remember) {
+          localStorage.setItem("legeclair_user", JSON.stringify(user.value));
+          localStorage.setItem("legeclair_token", token);
+        } else {
+          sessionStorage.setItem("legeclair_user", JSON.stringify(user.value));
+          sessionStorage.setItem("legeclair_token", token);
+        }
 
-      // Update last login
-      foundUser.lastLoginAt = new Date();
-
-      // Set user and authentication state
-      user.value = foundUser;
-      isAuthenticated.value = true;
-      sessionToken.value = `mock_token_${Date.now()}`;
-
-      // Store in localStorage if remember is true
-      if (credentials.remember) {
-        localStorage.setItem("legeclair_user", JSON.stringify(foundUser));
-        localStorage.setItem("legeclair_token", sessionToken.value);
+        console.log("Login successful:", userData.email);
+        return true;
       } else {
-        sessionStorage.setItem("legeclair_user", JSON.stringify(foundUser));
-        sessionStorage.setItem("legeclair_token", sessionToken.value);
+        throw new Error(response.error || "Login failed");
       }
-
-      console.log("Mock login successful:", foundUser.email);
-      return true;
     } catch (error_) {
       error.value = error_ instanceof Error ? error_.message : "Login failed";
       console.error("Login error:", error_);
@@ -148,45 +149,36 @@ export const useAppStore = defineStore("app", () => {
     error.value = null;
 
     try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await authAPI.register(userData);
 
-      // Check if user already exists
-      const existingUser = mockUsers.find(
-        (u) => u.email === userData.email || u.username === userData.username,
-      );
-      if (existingUser) {
-        throw new Error("User with this email or username already exists");
+      if (response.success && response.data) {
+        const { user: newUserData, token } = response.data;
+
+        // Auto-login after registration
+        user.value = {
+          id: newUserData._id,
+          username: newUserData.username,
+          email: newUserData.email,
+          firstName: newUserData.firstName,
+          lastName: newUserData.lastName,
+          avatar: newUserData.avatar,
+          role: newUserData.role,
+          createdAt: new Date(newUserData.createdAt),
+          lastLoginAt: new Date(newUserData.lastLoginAt),
+          credits: newUserData.credits,
+        };
+        isAuthenticated.value = true;
+        sessionToken.value = token;
+
+        // Store in session storage
+        sessionStorage.setItem("legeclair_user", JSON.stringify(user.value));
+        sessionStorage.setItem("legeclair_token", token);
+
+        console.log("Registration successful:", newUserData.email);
+        return true;
+      } else {
+        throw new Error(response.error || "Registration failed");
       }
-
-      // Create new user
-      const newUser: User = {
-        id: (mockUsers.length + 1).toString(),
-        username: userData.username,
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        avatar: `https://i.pravatar.cc/150?img=${mockUsers.length + 1}`,
-        role: "user",
-        createdAt: new Date(),
-        lastLoginAt: new Date(),
-        credits: 0, // Assuming default credits
-      };
-
-      // Add to mock users (in real app, this would be saved to database)
-      mockUsers.push(newUser);
-
-      // Auto-login after registration
-      user.value = newUser;
-      isAuthenticated.value = true;
-      sessionToken.value = `mock_token_${Date.now()}`;
-
-      // Store in session storage
-      sessionStorage.setItem("legeclair_user", JSON.stringify(newUser));
-      sessionStorage.setItem("legeclair_token", sessionToken.value);
-
-      console.log("Mock registration successful:", newUser.email);
-      return true;
     } catch (error_) {
       error.value =
         error_ instanceof Error ? error_.message : "Registration failed";

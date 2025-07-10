@@ -9,6 +9,7 @@ import type {
 } from "@/types/document";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { documentsAPI } from "@/services/api";
 
 export const useDocumentsStore = defineStore("documents", () => {
   // State
@@ -113,62 +114,39 @@ export const useDocumentsStore = defineStore("documents", () => {
     error.value = null;
 
     try {
-      // Simulate API call - replace with actual API endpoint
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const params = {
+        page: pagination.value.page,
+        itemsPerPage: pagination.value.itemsPerPage,
+        search: filters.value.search,
+        type: filters.value.type,
+        status: filters.value.status,
+        dateFrom: filters.value.dateFrom?.toISOString(),
+        dateTo: filters.value.dateTo?.toISOString(),
+        sortKey: sort.value.key,
+        sortOrder: sort.value.order,
+      };
 
-      // Mock data for demonstration
-      const mockDocuments: Document[] = [
-        {
-          id: "1",
-          name: "Terms of Service - Legeclair",
-          type: "TOS",
-          content: "Generated TOS content...",
-          status: "PUBLISHED",
-          createdAt: new Date("2024-01-15"),
-          updatedAt: new Date("2024-01-20"),
-          version: 1,
-          metadata: {
-            companyName: "Legeclair",
-            domain: "legeclair.com",
-            jurisdiction: "France",
-          },
-        },
-        {
-          id: "2",
-          name: "Privacy Policy - Legeclair",
-          type: "PRIVACY_POLICY",
-          content: "Generated Privacy Policy content...",
-          status: "GENERATED",
-          createdAt: new Date("2024-01-18"),
-          updatedAt: new Date("2024-01-18"),
-          version: 1,
-          metadata: {
-            companyName: "Legeclair",
-            domain: "legeclair.com",
-            jurisdiction: "EU",
-          },
-        },
-        {
-          id: "3",
-          name: "Terms & Conditions - Legeclair",
-          type: "CGU",
-          content: "Generated CGU content...",
-          status: "DRAFT",
-          createdAt: new Date("2024-01-22"),
-          updatedAt: new Date("2024-01-22"),
-          version: 1,
-          metadata: {
-            companyName: "Legeclair",
-            domain: "legeclair.com",
-            jurisdiction: "France",
-          },
-        },
-      ];
+      const response = await documentsAPI.getDocuments(params);
 
-      documents.value = mockDocuments;
-      pagination.value.totalItems = documents.value.length;
+      if (response.success && response.data) {
+        documents.value = response.data.data.map((doc: any) => ({
+          id: doc._id,
+          name: doc.name,
+          type: doc.type,
+          content: doc.content,
+          status: doc.status,
+          createdAt: new Date(doc.createdAt),
+          updatedAt: new Date(doc.updatedAt),
+          version: doc.version,
+          metadata: doc.metadata,
+        }));
+        pagination.value.totalItems = response.data.pagination.totalItems;
+      } else {
+        throw new Error(response.error || "Failed to fetch documents");
+      }
     } catch (error_) {
-      error.value = "Failed to fetch documents";
+      error.value =
+        error_ instanceof Error ? error_.message : "Failed to fetch documents";
       console.error("Error fetching documents:", error_);
     } finally {
       loading.value = false;
@@ -182,32 +160,31 @@ export const useDocumentsStore = defineStore("documents", () => {
     error.value = null;
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await documentsAPI.createDocument(config);
 
-      const newDocument: Document = {
-        id: Date.now().toString(),
-        name: `${config.type} - ${config.companyName}`,
-        type: config.type,
-        content: `Generated ${config.type} content for ${config.companyName}...`,
-        status: "GENERATED",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        version: 1,
-        metadata: {
-          companyName: config.companyName,
-          domain: config.domain,
-          jurisdiction: config.jurisdiction,
-          customFields: config.customFields,
-        },
-      };
+      if (response.success && response.data) {
+        const newDocument: Document = {
+          id: response.data.document._id,
+          name: response.data.document.name,
+          type: response.data.document.type,
+          content: response.data.document.content,
+          status: response.data.document.status,
+          createdAt: new Date(response.data.document.createdAt),
+          updatedAt: new Date(response.data.document.updatedAt),
+          version: response.data.document.version,
+          metadata: response.data.document.metadata,
+        };
 
-      documents.value.unshift(newDocument);
-      pagination.value.totalItems = documents.value.length;
+        documents.value.unshift(newDocument);
+        pagination.value.totalItems++;
 
-      return newDocument;
+        return newDocument;
+      } else {
+        throw new Error(response.error || "Failed to create document");
+      }
     } catch (error_) {
-      error.value = "Failed to create document";
+      error.value =
+        error_ instanceof Error ? error_.message : "Failed to create document";
       console.error("Error creating document:", error_);
       throw error_;
     } finally {
