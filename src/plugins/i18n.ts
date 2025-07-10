@@ -1,24 +1,28 @@
-import { createI18n } from 'vue-i18n'
+import { createI18n } from "vue-i18n";
 
 const messages = {
   fr: {
-    home: 'Accueil',
-    services: 'Services',
-    pricing: 'Tarifs',
-    about: 'À propos',
-    login: 'Connexion',
-    register: 'Créer un compte',
-    legal_documents: 'Génération de documents juridiques',
-    audit_review: 'Audit & Revue',
-    welcome_to: 'Bienvenue sur',
-    tagline: 'Simplifiez votre travail juridique grâce à l\'automatisation intelligente',
-    legal_documents_desc: 'Générez instantanément des documents juridiques personnalisés adaptés à vos besoins. Notre plateforme vous guide pour créer des contrats, accords, et plus encore — rapidement et sans erreur.',
-    audit_review_desc: 'Auditez et révisez facilement vos documents juridiques. Legeclair analyse vos fichiers pour la conformité, signale les problèmes potentiels et fournit des recommandations pour des documents robustes et à jour.',
-    legal_notice: 'Mentions légales',
-    privacy_policy: 'Politique de confidentialité',
-    terms_of_use: 'CGU',
+    home: "Accueil",
+    services: "Services",
+    pricing: "Tarifs",
+    about: "À propos",
+    login: "Connexion",
+    register: "Créer un compte",
+    legal_documents: "Génération de documents juridiques",
+    audit_review: "Audit & Revue",
+    welcome_to: "Bienvenue sur",
+    tagline:
+      "Simplifiez votre travail juridique grâce à l'automatisation intelligente",
+    legal_documents_desc:
+      "Générez instantanément des documents juridiques personnalisés adaptés à vos besoins. Notre plateforme vous guide pour créer des contrats, accords, et plus encore — rapidement et sans erreur.",
+    audit_review_desc:
+      "Auditez et révisez facilement vos documents juridiques. Legeclair analyse vos fichiers pour la conformité, signale les problèmes potentiels et fournit des recommandations pour des documents robustes et à jour.",
+    legal_notice: "Mentions légales",
+    privacy_policy: "Politique de confidentialité",
+    terms_of_use: "CGU",
     register_title: "L'aventure commence ici",
-    register_subtitle: "Gérez vos démarches juridiques facilement et rapidement !",
+    register_subtitle:
+      "Gérez vos démarches juridiques facilement et rapidement !",
     username: "Nom d'utilisateur",
     register_agree: "J'accepte la",
     sign_up: "Créer un compte",
@@ -35,17 +39,20 @@ const messages = {
     password: "Mot de passe",
     // Landing page keys
     hero_title: "Transformez votre travail juridique",
-    hero_subtitle: "Automatisez la génération de documents et l'audit de conformité avec l'IA",
+    hero_subtitle:
+      "Automatisez la génération de documents et l'audit de conformité avec l'IA",
     hero_cta: "Commencer gratuitement",
     hero_secondary_cta: "Voir la démo",
     problem_title: "Les défis du travail juridique moderne",
-    problem_subtitle: "Les professionnels du droit et les entrepreneurs font face à des défis uniques",
+    problem_subtitle:
+      "Les professionnels du droit et les entrepreneurs font face à des défis uniques",
     problem_complexity: "Documents complexes et chronophages",
     problem_compliance: "Conformité réglementaire en constante évolution",
     problem_manual: "Processus manuels sujets aux erreurs",
     features_title: "Solutions intelligentes pour votre succès",
     feature_automation: "Automatisation intelligente",
-    feature_automation_desc: "Générez des documents juridiques en minutes, pas en heures",
+    feature_automation_desc:
+      "Générez des documents juridiques en minutes, pas en heures",
     feature_compliance: "Surveillance de conformité",
     feature_compliance_desc: "Restez à jour avec les dernières réglementations",
     feature_security: "Sécurité de niveau entreprise",
@@ -53,9 +60,11 @@ const messages = {
     feature_analytics: "Analyses avancées",
     feature_analytics_desc: "Insights pour optimiser vos processus",
     social_proof_title: "Approuvé par des milliers de professionnels",
-    testimonial_1: "Legeclair a réduit notre temps de génération de documents de 80%",
+    testimonial_1:
+      "Legeclair a réduit notre temps de génération de documents de 80%",
     testimonial_1_author: "Marie Dubois, Avocate",
-    testimonial_2: "La surveillance de conformité automatique nous fait gagner un temps précieux",
+    testimonial_2:
+      "La surveillance de conformité automatique nous fait gagner un temps précieux",
     testimonial_2_author: "Pierre Martin, DPO",
     stats_clients: "10,000+",
     stats_clients_label: "Clients satisfaits",
@@ -71,17 +80,20 @@ const messages = {
     pricing_enterprise: "Entreprise",
     pricing_enterprise_desc: "Pour les grandes équipes",
     final_cta_title: "Prêt à transformer votre travail juridique ?",
-    final_cta_subtitle: "Rejoignez des milliers de professionnels qui font confiance à Legeclair",
+    final_cta_subtitle:
+      "Rejoignez des milliers de professionnels qui font confiance à Legeclair",
     final_cta_button: "Commencer maintenant",
     trust_badges: "Certifié ISO 27001 • Conforme RGPD • SOC 2 Type II",
     // Documents module keys
     documents_title: "Génération de documents",
-    documents_subtitle: "Créez et gérez vos documents juridiques en toute simplicité",
+    documents_subtitle:
+      "Créez et gérez vos documents juridiques en toute simplicité",
     new_document: "Nouveau document",
     quick_actions: "Actions rapides",
     terms_of_service: "Conditions générales d'utilisation",
     terms_conditions: "Mentions légales",
-    generate_tos: "Générer des conditions générales d'utilisation complètes pour votre plateforme",
+    generate_tos:
+      "Générer des conditions générales d'utilisation complètes pour votre plateforme",
     generate_privacy: "Créer une politique de confidentialité conforme au RGPD",
     generate_cgu: "Générer des conditions générales",
     search_documents: "Rechercher des documents...",
@@ -103,7 +115,8 @@ const messages = {
     website_url_required: "L'URL du site web est requise",
     invalid_url: "L'URL n'est pas valide",
     upload_document: "Télécharger un document",
-    upload_document_placeholder: "Sélectionnez un fichier PDF, DOC, DOCX ou TXT",
+    upload_document_placeholder:
+      "Sélectionnez un fichier PDF, DOC, DOCX ou TXT",
     document_required: "Un document est requis",
     basic_information: "Informations de base",
     type: "Type",
@@ -130,9 +143,11 @@ const messages = {
     archived: "Archivé",
     version: "Version",
     confirm_delete: "Confirmer la suppression",
-    confirm_delete_message: "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action ne peut pas être annulée.",
+    confirm_delete_message:
+      'Êtes-vous sûr de vouloir supprimer "{name}" ? Cette action ne peut pas être annulée.',
     confirm_bulk_delete: "Confirmer la suppression en masse",
-    confirm_bulk_delete_message: "Êtes-vous sûr de vouloir supprimer {count} documents sélectionnés ? Cette action ne peut pas être annulée.",
+    confirm_bulk_delete_message:
+      "Êtes-vous sûr de vouloir supprimer {count} documents sélectionnés ? Cette action ne peut pas être annulée.",
     cancel: "Annuler",
     document_deleted: "Document supprimé avec succès",
     documents_deleted: "{count} documents supprimés avec succès",
@@ -150,7 +165,8 @@ const messages = {
     // Audits module keys
     audits: "Audits",
     audits_title: "Audit de documents",
-    audits_subtitle: "Analysez et révisez vos documents juridiques pour la conformité",
+    audits_subtitle:
+      "Analysez et révisez vos documents juridiques pour la conformité",
     new_audit: "Nouvel audit",
     audit_tos: "Audit CGU",
     audit_tos_desc: "Analysez vos conditions générales d'utilisation",
@@ -164,9 +180,11 @@ const messages = {
     corrections: "Corrections",
     corrections_list: "Liste des corrections",
     no_corrections: "Aucune correction",
-    no_corrections_description: "Aucune correction n'a été identifiée dans ce document",
+    no_corrections_description:
+      "Aucune correction n'a été identifiée dans ce document",
     create_new_audit: "Créer un nouvel audit",
-    create_audit_description: "Analysez un document ou du contenu pour identifier les problèmes de conformité",
+    create_audit_description:
+      "Analysez un document ou du contenu pour identifier les problèmes de conformité",
     source_name: "Nom de la source",
     source_name_required: "Le nom de la source est requis",
     audit_name_required: "Le nom de l'audit est requis",
@@ -192,7 +210,8 @@ const messages = {
     completed_audits: "Audits terminés",
     critical_issues: "Problèmes critiques",
     pending_reviews: "Révisions en attente",
-    confirm_delete_audit_message: "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action ne peut pas être annulée.",
+    confirm_delete_audit_message:
+      'Êtes-vous sûr de vouloir supprimer "{name}" ? Cette action ne peut pas être annulée.',
     source_type: "Type de source",
     source_web: "Web",
     source_document: "Document",
@@ -205,7 +224,8 @@ const messages = {
     document_type_required: "Le type de document est requis",
     // Document generation dialog
     generate_document: "Générer un document",
-    fill_details: "Remplissez les détails ci-dessous pour générer votre document",
+    fill_details:
+      "Remplissez les détails ci-dessous pour générer votre document",
     company_name: "Nom de l'entreprise",
     website_domain: "Domaine du site web",
     legal_jurisdiction: "Juridiction légale",
@@ -349,14 +369,17 @@ const messages = {
     audit_information: "Informations de l'audit",
     audit_information_description: "Voir et gérer les détails de l'audit",
     audit_context: "Contexte",
-    context_description: "Texte utilisé pour personnaliser les résultats de l'audit.",
+    context_description:
+      "Texte utilisé pour personnaliser les résultats de l'audit.",
     audit_notes: "Notes",
-    audit_notes_description: "Ajoutez des notes ou des commentaires. Ces notes n'auront aucun impact sur les résultats de l'audit.",
+    audit_notes_description:
+      "Ajoutez des notes ou des commentaires. Ces notes n'auront aucun impact sur les résultats de l'audit.",
     add_notes_placeholder: "Ajoutez des notes ou des commentaires...",
     save_notes: "Enregistrer les notes",
     no_context_provided: "Aucun contexte fourni",
     request_new_version: "Demander une nouvelle version",
-    request_new_version_description: "Demandez une nouvelle version de l'audit pour corriger les problèmes identifiés.",
+    request_new_version_description:
+      "Demandez une nouvelle version de l'audit pour corriger les problèmes identifiés.",
     feedback_required: "Raisons de la demande",
     feedback_corrections_insufficient: "Corrections insuffisamment détaillées",
     feedback_context_misunderstood: "Contexte mal compris",
@@ -364,27 +387,31 @@ const messages = {
     feedback_different_approach: "Approche différente",
     feedback_other: "Autre",
     new_context_optional: "Contexte à ajouter à la prochaine version",
-    new_context_placeholder: "Décrire des éléments de l'audit à corriger, des ressources sur lesquelles se baser, etc.",
-    new_context_help: "Aidez-nous à mieux comprendre vos besoins pour améliorer la qualité des corrections.",
+    new_context_placeholder:
+      "Décrire des éléments de l'audit à corriger, des ressources sur lesquelles se baser, etc.",
+    new_context_help:
+      "Aidez-nous à mieux comprendre vos besoins pour améliorer la qualité des corrections.",
     current_context: "Contexte de la version actuelle",
     request_version: "Nouvelle version",
   },
   en: {
-    home: 'Home',
-    services: 'Services',
-    pricing: 'Pricing',
-    about: 'About Us',
-    login: 'Log in',
-    register: 'Create an account',
-    legal_documents: 'Legal Documents Generation',
-    audit_review: 'Audit & Review',
-    welcome_to: 'Welcome to',
-    tagline: 'Empowering your legal workflow with smart automation',
-    legal_documents_desc: 'Instantly generate customized legal documents tailored to your needs. Our platform guides you through simple steps to create contracts, agreements, and more—saving you time and reducing errors.',
-    audit_review_desc: 'Effortlessly audit and review your legal documents. Legeclair analyzes your files for compliance, highlights potential issues, and provides actionable insights to ensure your documents are robust and up-to-date.',
-    legal_notice: 'Legal Notice',
-    privacy_policy: 'Privacy Policy',
-    terms_of_use: 'Terms of Use',
+    home: "Home",
+    services: "Services",
+    pricing: "Pricing",
+    about: "About Us",
+    login: "Log in",
+    register: "Create an account",
+    legal_documents: "Legal Documents Generation",
+    audit_review: "Audit & Review",
+    welcome_to: "Welcome to",
+    tagline: "Empowering your legal workflow with smart automation",
+    legal_documents_desc:
+      "Instantly generate customized legal documents tailored to your needs. Our platform guides you through simple steps to create contracts, agreements, and more—saving you time and reducing errors.",
+    audit_review_desc:
+      "Effortlessly audit and review your legal documents. Legeclair analyzes your files for compliance, highlights potential issues, and provides actionable insights to ensure your documents are robust and up-to-date.",
+    legal_notice: "Legal Notice",
+    privacy_policy: "Privacy Policy",
+    terms_of_use: "Terms of Use",
     register_title: "Adventure starts here",
     register_subtitle: "Make your app management easy and fun!",
     username: "Username",
@@ -403,11 +430,13 @@ const messages = {
     password: "Password",
     // Landing page keys
     hero_title: "Transform Your Legal Work",
-    hero_subtitle: "Automate document generation and compliance auditing with AI",
+    hero_subtitle:
+      "Automate document generation and compliance auditing with AI",
     hero_cta: "Start Free",
     hero_secondary_cta: "Watch Demo",
     problem_title: "The Challenges of Modern Legal Work",
-    problem_subtitle: "Legal professionals and entrepreneurs face unique challenges",
+    problem_subtitle:
+      "Legal professionals and entrepreneurs face unique challenges",
     problem_complexity: "Complex and time-consuming documents",
     problem_compliance: "Ever-evolving regulatory compliance",
     problem_manual: "Error-prone manual processes",
@@ -500,9 +529,11 @@ const messages = {
     archived: "Archived",
     version: "Version",
     confirm_delete: "Confirm Delete",
-    confirm_delete_message: "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    confirm_delete_message:
+      'Are you sure you want to delete "{name}"? This action cannot be undone.',
     confirm_bulk_delete: "Confirm Bulk Delete",
-    confirm_bulk_delete_message: "Are you sure you want to delete {count} selected documents? This action cannot be undone.",
+    confirm_bulk_delete_message:
+      "Are you sure you want to delete {count} selected documents? This action cannot be undone.",
     cancel: "Cancel",
     document_deleted: "Document deleted successfully",
     documents_deleted: "{count} documents deleted successfully",
@@ -534,9 +565,11 @@ const messages = {
     corrections: "Corrections",
     corrections_list: "Corrections List",
     no_corrections: "No Corrections",
-    no_corrections_description: "No corrections were identified in this document",
+    no_corrections_description:
+      "No corrections were identified in this document",
     create_new_audit: "Create New Audit",
-    create_audit_description: "Analyze a document or content to identify compliance issues",
+    create_audit_description:
+      "Analyze a document or content to identify compliance issues",
     source_name: "Source Name",
     source_name_required: "Source name is required",
     audit_name_required: "Audit name is required",
@@ -562,7 +595,8 @@ const messages = {
     completed_audits: "Completed Audits",
     critical_issues: "Critical Issues",
     pending_reviews: "Pending Reviews",
-    confirm_delete_audit_message: "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    confirm_delete_audit_message:
+      'Are you sure you want to delete "{name}"? This action cannot be undone.',
     source_type: "Source Type",
     source_web: "Web",
     source_document: "Document",
@@ -708,31 +742,36 @@ const messages = {
     audit_context: "Context",
     context_description: "Data used to customize audit results",
     audit_notes: "Notes",
-    audit_notes_description: "Add notes or comments. These notes will have no impact on the audit results.",
+    audit_notes_description:
+      "Add notes or comments. These notes will have no impact on the audit results.",
     add_notes_placeholder: "Add notes or comments...",
     save_notes: "Save Notes",
     no_context_provided: "No context provided",
     request_new_version: "Request New Version",
-    request_new_version_description: "Request a new version of the audit to correct the identified issues.",
+    request_new_version_description:
+      "Request a new version of the audit to correct the identified issues.",
     feedback_required: "Reasons for the request",
-    feedback_corrections_insufficient: "Insufficient details in the corrections",
+    feedback_corrections_insufficient:
+      "Insufficient details in the corrections",
     feedback_context_misunderstood: "Misunderstood context",
     feedback_quality_issues: "Quality issues in the corrections",
     feedback_different_approach: "Different approach",
     feedback_other: "Other",
     new_context_optional: "Context to add to the next version",
-    new_context_placeholder: "Describe elements to correct in the audit, resources to base the corrections on, etc.",
-    new_context_help: "Help us better understand your needs to improve the quality of the corrections.",
+    new_context_placeholder:
+      "Describe elements to correct in the audit, resources to base the corrections on, etc.",
+    new_context_help:
+      "Help us better understand your needs to improve the quality of the corrections.",
     current_context: "Current context",
     request_version: "Request Version",
-  }
-}
+  },
+};
 
 const i18n = createI18n({
   legacy: false,
-  locale: 'fr',
-  fallbackLocale: 'fr',
+  locale: "fr",
+  fallbackLocale: "fr",
   messages,
-})
+});
 
-export default i18n 
+export default i18n;

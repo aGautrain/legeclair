@@ -1,20 +1,33 @@
 <template>
-  <v-footer
-    app
-    height="40"
-  >
-    <div class="d-flex align-center" style="gap: 16px;">
-      <router-link class="text-caption on-surface" :to="'/legal-notice'" style="text-decoration: none;">{{$t('legal_notice')}}</router-link>
+  <v-footer app height="40">
+    <div class="d-flex align-center" style="gap: 16px">
+      <router-link
+        class="text-caption on-surface"
+        style="text-decoration: none"
+        :to="'/legal-notice'"
+        >{{ $t("legal_notice") }}</router-link
+      >
       <span>-</span>
-      <router-link class="text-caption on-surface" :to="'/privacy-policy'" style="text-decoration: none;">{{$t('privacy_policy')}}</router-link>
+      <router-link
+        class="text-caption on-surface"
+        style="text-decoration: none"
+        :to="'/privacy-policy'"
+        >{{ $t("privacy_policy") }}</router-link
+      >
       <span>-</span>
-      <router-link class="text-caption on-surface" :to="'/terms'" style="text-decoration: none;">{{$t('terms_of_use')}}</router-link>
+      <router-link
+        class="text-caption on-surface"
+        style="text-decoration: none"
+        :to="'/terms'"
+        >{{ $t("terms_of_use") }}</router-link
+      >
     </div>
     <div
       class="text-caption text-disabled"
-      style="position: absolute; right: 16px;"
+      style="position: absolute; right: 16px"
     >
-      &copy; {{ (new Date()).getFullYear() }} <span class="d-none d-sm-inline-block">Bloupy</span>
+      &copy; {{ new Date().getFullYear() }}
+      <span class="d-none d-sm-inline-block">Bloupy</span>
       —
       <a
         class="text-decoration-none on-surface"
@@ -28,8 +41,6 @@
   </v-footer>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
-<style scoped lang="sass">
-</style>
+<style scoped lang="sass"></style>
