@@ -215,7 +215,18 @@ export const useAuditsStore = defineStore("audits", () => {
       const response = await auditsAPI.getAudit(id);
 
       if (response.success && response.data) {
-        const audit = response.data.audit;
+        const auditRaw = response.data.audit;
+        const audit = {
+          ...auditRaw,
+          id: auditRaw._id,
+          corrections: auditRaw.corrections
+            ? auditRaw.corrections.map((correction: any) => ({
+                ...correction,
+                id: correction._id,
+              }))
+            : [],
+        };
+
         return audit;
       } else {
         console.error("Error fetching audit:", response.message);
