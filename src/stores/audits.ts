@@ -412,6 +412,46 @@ export const useAuditsStore = defineStore('audits', () => {
     }
   }
 
+  const createNewVersion = async (auditId: string, feedback: string, newContext?: string): Promise<Audit> => {
+    loading.value = true
+    error.value = null
+
+    try {
+      // Find the original audit
+      const originalAudit = audits.value.find(a => a.id === auditId)
+      if (!originalAudit) {
+        throw new Error('Original audit not found')
+      }
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500))
+
+      // Create new version with incremented version number
+      const newVersion: Audit = {
+        ...originalAudit,
+        id: Date.now().toString(),
+        name: `${originalAudit.name} (v${originalAudit.version + 1})`,
+        version: originalAudit.version + 1,
+        status: 'PENDING',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        context: newContext || originalAudit.context,
+        notes: `Version request feedback: ${feedback}`
+      }
+
+      audits.value.unshift(newVersion)
+      pagination.value.totalItems = audits.value.length
+
+      return newVersion
+    } catch (err) {
+      error.value = 'Failed to create new version'
+      console.error('Error creating new version:', err)
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   const updateAudit = async (id: string, updates: Partial<Audit>): Promise<Audit> => {
     loading.value = true
     error.value = null
@@ -533,6 +573,7 @@ export const useAuditsStore = defineStore('audits', () => {
     fetchAudits,
     fetchAudit,
     createAudit,
+    createNewVersion,
     updateAudit,
     deleteAudit,
     bulkDeleteAudits,

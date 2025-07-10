@@ -42,10 +42,10 @@
           <v-btn
             v-if="audit"
             color="primary"
-            prepend-icon="mdi-information"
-            @click="activeTab = 'information'"
+            prepend-icon="mdi-refresh"
+            @click="showVersionRequestDialog = true"
           >
-            {{ $t('audit_information') }}
+            {{ $t('request_new_version') }}
           </v-btn>
         </div>
       </div>
@@ -361,19 +361,29 @@
         </section>
       </div>
     </v-container>
+
+    <!-- Version Request Dialog -->
+    <AuditVersionRequestDialog
+      v-model="showVersionRequestDialog"
+      :current-context="audit?.context"
+      :audit-id="audit?.id || ''"
+      @request-submitted="handleVersionRequest"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuditsStore } from '@/stores/audits'
 import { routeUtils } from '@/router'
 import type { Audit, SourceType } from '@/types/audit'
+import AuditVersionRequestDialog from '@/components/AuditVersionRequestDialog.vue'
 
 // Route and store
 const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
 const auditsStore = useAuditsStore()
 
@@ -388,6 +398,7 @@ const copiedCorrected = ref(false)
 const auditNotes = ref('')
 const savingNotes = ref(false)
 const notesChanged = ref(false)
+const showVersionRequestDialog = ref(false)
 
 // Computed properties
 const highlightedOriginalContent = computed(() => {
@@ -522,6 +533,26 @@ const saveNotes = async () => {
     // You might want to show a toast notification here
   } finally {
     savingNotes.value = false
+  }
+}
+
+const handleVersionRequest = async (data: { feedback: string; newContext?: string }) => {
+  if (!audit.value) return
+  
+  try {
+    // Create new audit version
+    const newVersion = await auditsStore.createNewVersion(
+      audit.value.id, 
+      data.feedback, 
+      data.newContext
+    )
+    
+    // Redirect to the new audit version
+    await router.push(`/audits/${newVersion.id}`)
+    
+  } catch (err) {
+    console.error('Failed to submit version request:', err)
+    // You could show an error notification here
   }
 }
 

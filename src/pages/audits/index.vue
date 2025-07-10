@@ -373,17 +373,8 @@
                   icon="mdi-download"
                   size="small"
                   variant="text"
-                  color="info"
                   @click="downloadAudit(item)"
                   :title="$t('download_audit')"
-                />
-                <v-btn
-                  icon="mdi-delete"
-                  size="small"
-                  variant="text"
-                  color="error"
-                  @click="confirmDelete(item)"
-                  :title="$t('delete_audit')"
                 />
               </div>
             </template>
