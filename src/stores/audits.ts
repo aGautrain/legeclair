@@ -247,8 +247,8 @@ export const useAuditsStore = defineStore("audits", () => {
         sourceType: config.sourceType,
         documentType: config.documentType,
         sourceContent: config.sourceContent,
-        sourceName: config.sourceName,
         sourceUrl: config.sourceUrl,
+        file: config.file,
         companyName: config.companyName,
         domain: config.domain,
         jurisdiction: config.jurisdiction,
@@ -259,6 +259,15 @@ export const useAuditsStore = defineStore("audits", () => {
         const newAudit = response.data.audit;
         audits.value.unshift(newAudit);
         pagination.value.totalItems = audits.value.length;
+
+        // If there's a job (web scraping or document parsing), return audit with job info
+        if (response.data.job) {
+          return {
+            ...newAudit,
+            job: response.data.job,
+          } as any;
+        }
+
         return newAudit;
       } else {
         throw new Error(response.message || "Failed to create audit");

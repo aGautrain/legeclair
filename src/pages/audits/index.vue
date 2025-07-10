@@ -264,7 +264,7 @@
               {{ $t("error_loading_audits") }}
             </h3>
             <p class="text-body-2 text-medium-emphasis mb-4">{{ error }}</p>
-            <v-btn color="primary" @click="fetchAudits">{{
+            <v-btn color="primary" @click="auditsStore.fetchAudits">{{
               $t("retry")
             }}</v-btn>
           </div>

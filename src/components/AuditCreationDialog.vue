@@ -23,6 +23,7 @@
                 required
                 :rules="[(v) => !!v || $t('source_type_required')]"
                 variant="outlined"
+                @update:model-value="onSourceTypeChange"
               />
             </v-col>
 
@@ -94,10 +95,9 @@
               <v-file-input
                 v-else-if="formData.sourceType === 'DOCUMENT'"
                 v-model="uploadedFile"
-                accept=".pdf,.doc,.docx,.txt"
+                accept=".txt,.pdf"
                 :label="$t('upload_document')"
                 :placeholder="$t('upload_document_placeholder')"
-                prepend-inner-icon="mdi-file-upload"
                 required
                 :rules="[(v) => !!v || $t('document_required')]"
                 variant="outlined"
@@ -114,17 +114,6 @@
                 maxlength="500"
                 :placeholder="$t('notes_placeholder')"
                 rows="3"
-                variant="outlined"
-              />
-            </v-col>
-
-            <!-- Source Name -->
-            <v-col cols="12">
-              <v-text-field
-                v-model="formData.sourceName"
-                :label="$t('audit_name')"
-                required
-                :rules="[(v) => !!v || $t('audit_name_required')]"
                 variant="outlined"
               />
             </v-col>
@@ -184,7 +173,6 @@ const isCreating = ref(false);
 
 const formData = ref({
   sourceType: SourceType.WEB,
-  sourceName: "",
   sourceUrl: "",
   companyName: "",
   domain: "",
@@ -241,15 +229,15 @@ const onSourceTypeChange = (newType: "WEB" | "DOCUMENT") => {
   formData.value.sourceContent = "";
   formData.value.sourceUrl = "";
   uploadedFile.value = null;
+
+  // Reset validation
+  form.value?.resetValidation();
 };
 
 const onFileChange = (file: File | null) => {
   if (file) {
-    // In a real app, you would read the file content here
-    // For now, we'll just set a placeholder
-    formData.value.sourceContent = `Document: ${file.name} (${file.size} bytes)`;
-  } else {
-    formData.value.sourceContent = "";
+    // File will be processed by backend job
+    console.log("File selected:", file.name, file.size, "bytes");
   }
 };
 
@@ -261,7 +249,6 @@ const closeDialog = () => {
 const resetForm = () => {
   formData.value = {
     sourceType: SourceType.WEB,
-    sourceName: "",
     sourceUrl: "",
     companyName: "",
     domain: "",
@@ -277,14 +264,25 @@ const resetForm = () => {
 const createAudit = async () => {
   if (!isFormValid.value) return;
 
+  // Additional validation based on source type
+  if (formData.value.sourceType === "WEB" && !formData.value.sourceUrl) {
+    console.error("Source URL is required for WEB audits");
+    return;
+  }
+
+  if (formData.value.sourceType === "DOCUMENT" && !uploadedFile.value) {
+    console.error("File is required for DOCUMENT audits");
+    return;
+  }
+
   isCreating.value = true;
 
   try {
     const config: AuditCreationConfig = {
       sourceType: formData.value.sourceType,
       sourceContent: formData.value.sourceContent,
-      sourceName: formData.value.sourceName,
       sourceUrl: formData.value.sourceUrl || undefined,
+      file: uploadedFile.value || undefined,
       companyName: formData.value.companyName,
       domain: formData.value.domain,
       jurisdiction: formData.value.jurisdiction,
@@ -310,6 +308,7 @@ watch(
   (newType) => {
     if (newType === "WEB" || newType === "DOCUMENT") {
       formData.value.sourceType = newType as SourceType;
+      onSourceTypeChange(newType as "WEB" | "DOCUMENT");
     }
   },
 );
@@ -324,7 +323,16 @@ watch(
         props.selectedSourceType === "DOCUMENT")
     ) {
       formData.value.sourceType = props.selectedSourceType as SourceType;
+      onSourceTypeChange(props.selectedSourceType as "WEB" | "DOCUMENT");
     }
+  },
+);
+
+// Watch for source type changes to reset validation
+watch(
+  () => formData.value.sourceType,
+  (newType) => {
+    onSourceTypeChange(newType as "WEB" | "DOCUMENT");
   },
 );
 </script>

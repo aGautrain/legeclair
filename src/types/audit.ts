@@ -48,7 +48,6 @@ export type AuditStatus =
 
 export interface AuditMetadata {
   sourceUrl?: string;
-  sourceName?: string;
   reviewer?: string;
   companyName?: string;
   domain?: string;
@@ -86,9 +85,9 @@ export interface AuditFilters {
 export interface AuditCreationConfig {
   sourceType: SourceType;
   documentType: DocumentType;
-  sourceContent: string;
-  sourceName: string;
+  sourceContent?: string;
   sourceUrl?: string;
+  file?: File;
   companyName?: string;
   domain?: string;
   jurisdiction?: string;

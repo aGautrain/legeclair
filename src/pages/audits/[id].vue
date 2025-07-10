@@ -79,10 +79,10 @@
                 <v-col cols="12" md="3">
                   <div class="metadata-item">
                     <span class="text-caption text-medium-emphasis">{{
-                      $t("source_name")
+                      $t("name")
                     }}</span>
                     <p class="text-body-2 font-weight-medium">
-                      {{ audit.metadata?.sourceName }}
+                      {{ audit.name }}
                     </p>
                   </div>
                 </v-col>
