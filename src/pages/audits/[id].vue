@@ -444,7 +444,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Audit, SourceType } from "@/types/audit";
+import type { Audit, AuditStatus, SourceType } from "@/types/audit";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -666,23 +666,25 @@ const getSourceTypeLabel = (sourceType: SourceType) => {
   return labels[sourceType] || sourceType;
 };
 
-const getStatusColor = (status: string) => {
-  const colors: Record<string, string> = {
-    PENDING: "grey",
-    IN_PROGRESS: "warning",
-    COMPLETED: "success",
-    REVIEWED: "info",
+const getStatusColor = (status: AuditStatus) => {
+  const colors: Record<AuditStatus, string> = {
+    INITIALIZED: "grey",
+    CONTENT_READY: "warning",
+    PROCESSING: "info",
+    READY_FOR_REVIEW: "success",
+    OUTDATED: "error",
     ARCHIVED: "secondary",
   };
   return colors[status] || "grey";
 };
 
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    PENDING: t("pending"),
-    IN_PROGRESS: t("in_progress"),
-    COMPLETED: t("completed"),
-    REVIEWED: t("reviewed"),
+const getStatusLabel = (status: AuditStatus) => {
+  const labels: Record<AuditStatus, string> = {
+    INITIALIZED: t("initialized"),
+    CONTENT_READY: t("content_ready"),
+    PROCESSING: t("processing"),
+    READY_FOR_REVIEW: t("ready_for_review"),
+    OUTDATED: t("outdated"),
     ARCHIVED: t("archived"),
   };
   return labels[status] || status;

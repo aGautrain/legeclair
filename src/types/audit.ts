@@ -40,11 +40,12 @@ export interface Audit {
 }
 
 export type AuditStatus =
-  | "PENDING"
-  | "IN_PROGRESS"
-  | "COMPLETED"
-  | "REVIEWED"
-  | "ARCHIVED";
+  | "INITIALIZED" // Audit created but no source content yet
+  | "CONTENT_READY" // Source content populated (web scraping or file parsing complete)
+  | "PROCESSING" // AI is analyzing and extracting corrections
+  | "READY_FOR_REVIEW" // Audit finalized, ready for user review
+  | "OUTDATED" // Another version has been requested
+  | "ARCHIVED"; // User no longer needs it
 
 export interface AuditMetadata {
   sourceUrl?: string;

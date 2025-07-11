@@ -524,8 +524,8 @@ const auditStatsCards = computed(() => [
     color: "primary",
   },
   {
-    label: t("completed_audits"),
-    value: auditStats.value.byStatus.COMPLETED,
+    label: t("ready_for_review"),
+    value: auditStats.value.byStatus.READY_FOR_REVIEW,
     icon: "mdi-check-circle-outline",
     color: "success",
   },
@@ -536,9 +536,11 @@ const auditStatsCards = computed(() => [
     color: "error",
   },
   {
-    label: t("pending_reviews"),
+    label: t("in_progress"),
     value:
-      auditStats.value.byStatus.PENDING + auditStats.value.byStatus.IN_PROGRESS,
+      auditStats.value.byStatus.INITIALIZED +
+      auditStats.value.byStatus.CONTENT_READY +
+      auditStats.value.byStatus.PROCESSING,
     icon: "mdi-clock-outline",
     color: "warning",
   },
@@ -550,10 +552,11 @@ const sourceTypes = computed(() => [
 ]);
 
 const auditStatuses = computed(() => [
-  { label: t("pending"), value: "PENDING" },
-  { label: t("in_progress"), value: "IN_PROGRESS" },
-  { label: t("completed"), value: "COMPLETED" },
-  { label: t("reviewed"), value: "REVIEWED" },
+  { label: t("initialized"), value: "INITIALIZED" },
+  { label: t("content_ready"), value: "CONTENT_READY" },
+  { label: t("processing"), value: "PROCESSING" },
+  { label: t("ready_for_review"), value: "READY_FOR_REVIEW" },
+  { label: t("outdated"), value: "OUTDATED" },
   { label: t("archived"), value: "ARCHIVED" },
 ]);
 
@@ -798,10 +801,11 @@ const getSourceTypeLabel = (type: SourceType) => {
 
 const getStatusColor = (status: AuditStatus) => {
   const colors = {
-    PENDING: "warning",
-    IN_PROGRESS: "info",
-    COMPLETED: "success",
-    REVIEWED: "primary",
+    INITIALIZED: "warning",
+    CONTENT_READY: "info",
+    PROCESSING: "primary",
+    READY_FOR_REVIEW: "success",
+    OUTDATED: "orange",
     ARCHIVED: "grey",
   };
   return colors[status] || "grey";
@@ -809,10 +813,11 @@ const getStatusColor = (status: AuditStatus) => {
 
 const getStatusLabel = (status: AuditStatus) => {
   const labels = {
-    PENDING: t("pending"),
-    IN_PROGRESS: t("in_progress"),
-    COMPLETED: t("completed"),
-    REVIEWED: t("reviewed"),
+    INITIALIZED: t("initialized"),
+    CONTENT_READY: t("content_ready"),
+    PROCESSING: t("processing"),
+    READY_FOR_REVIEW: t("ready_for_review"),
+    OUTDATED: t("outdated"),
     ARCHIVED: t("archived"),
   };
   return labels[status] || status;
